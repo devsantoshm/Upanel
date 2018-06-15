@@ -193,12 +193,14 @@
                 axios.post('/categoria/registrar',{
                     'nombre': this.nombre,
                     'descripcion': this.descripcion
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarCategoria();
-                }).catch(function (error) {
-                    console.log(error);
-                });
+                    })
+                    .then(function (response) {
+                        me.cerrarModal();
+                        me.listarCategoria();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             validarCategoria(){
                 this.errorCategoria=0;

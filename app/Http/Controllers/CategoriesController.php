@@ -14,7 +14,7 @@ class CategoriesController extends Controller
 
     public function store(Request $request) {
         Categoria::create([
-            'nombre' => $request->name,
+            'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
             'condicion' => '1'
         ]);
