@@ -124,8 +124,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarCategoria()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-outline-info" @click="registrarCategoria()">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-outline-success" @click="actualizarCategoria()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -170,7 +170,8 @@
                 tituloModal : '',
                 tipoAccion : 0,
                 errorCategoria : 0,
-                errorMostrarMsjCategoria : []
+                errorMostrarMsjCategoria : [],
+                categoria_id: 0,
             }
         },
         methods : {
@@ -191,6 +192,26 @@
                 let me = this;
 
                 axios.post('/categoria/registrar',{
+                    'nombre': this.nombre,
+                    'descripcion': this.descripcion
+                    })
+                    .then(function (response) {
+                        me.cerrarModal();
+                        me.listarCategoria();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            actualizarCategoria(){
+                if (this.validarCategoria()){
+                    return;
+                }
+
+                let me = this;
+
+                axios.put('/categoria/actualizar',{
+                    'id': this.categoria_id,
                     'nombre': this.nombre,
                     'descripcion': this.descripcion
                     })
@@ -234,7 +255,13 @@
                             }
                             case 'actualizar':
                             {
-
+                                this.categoria_id = data['id'];
+                                this.modal =1;
+                                this.tituloModal = 'Actualizar categoría';
+                                this.tipoAccion = 2;
+                                this.nombre = data['nombre'];
+                                this.descripcion = data['descripcion'];
+                                break;
                             }
                         }
                     }
