@@ -7,12 +7,16 @@ use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
+        if (!$request->ajax()) return redirect('/');
+
         $categorias = Categoria::all();
         return $categorias;
     }
 
     public function store(Request $request) {
+        if (!$request->ajax()) return redirect('/');
+
         Categoria::create([
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
@@ -21,6 +25,8 @@ class CategoriesController extends Controller
     }
 
     public function update(Request $request) {
+        if (!$request->ajax()) return redirect('/');
+
         $categoria = Categoria::findOrFail($request->id);
 
         $categoria->nombre = $request->nombre;
@@ -30,12 +36,16 @@ class CategoriesController extends Controller
     }
 
     public function desactivar(Request $request) {
+        if (!$request->ajax()) return redirect('/');
+
         $categoria = Categoria::findOrFail($request->id);
         $categoria->condicion = '0';
         $categoria->save();
     }
 
     public function activar(Request $request) {
+        if (!$request->ajax()) return redirect('/');
+
         $categoria = Categoria::findOrFail($request->id);
         $categoria->condicion = '1';
         $categoria->save();
