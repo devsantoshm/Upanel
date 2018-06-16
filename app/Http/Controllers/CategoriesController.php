@@ -9,11 +9,19 @@ class CategoriesController extends Controller
 {
     public function index(Request $request) {
         if (!$request->ajax()) return redirect('/');
-
-        $categorias = Categoria::all();
-        return $categorias;
+        $categorias = Categoria::paginate();
+        return [
+            'pagination' => [
+                'total'        => $categorias->total(),
+                'current_page' => $categorias->currentPage(),
+                'per_page'     => $categorias->perPage(),
+                'last_page'    => $categorias->lastPage(),
+                'from'         => $categorias->firstItem(),
+                'to'           => $categorias->lastItem(),
+            ],
+            'categorias' => $categorias
+        ];
     }
-
     public function store(Request $request) {
         if (!$request->ajax()) return redirect('/');
 
