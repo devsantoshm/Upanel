@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Categoria;
 use Illuminate\Http\Request;
+use function PHPSTORM_META\elementType;
 
 class CategoriesController extends Controller
 {
     public function index(Request $request) {
         if (!$request->ajax()) return redirect('/');
-        $categorias = Categoria::paginate();
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if ($buscar==''){
+            $categorias = Categoria::orderBy('id', 'desc')->paginate(3);
+        }
+        else{
+            $categorias = Categoria::where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(3);
+        }
+
+
         return [
             'pagination' => [
                 'total'        => $categorias->total(),
