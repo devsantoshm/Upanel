@@ -14,7 +14,7 @@ class CategoriesController extends Controller
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
-        if ($buscar==''){
+        if ($buscar == ''){
             $categorias = Categoria::orderBy('id', 'desc')->paginate(3);
         }
         else{
@@ -34,6 +34,7 @@ class CategoriesController extends Controller
             'categorias' => $categorias
         ];
     }
+
     public function store(Request $request) {
         if (!$request->ajax()) return redirect('/');
 

@@ -15,9 +15,20 @@ Route::get('/', function () {
     return view('contenido.contenido');
 });
 
-Route::get('/categoria', 'CategoriesController@index');
-Route::post('/categoria/registrar', 'CategoriesController@store');
-Route::put('/categoria/actualizar', 'CategoriesController@update');
-Route::put('/categoria/desactivar', 'CategoriesController@desactivar');
-Route::put('/categoria/activar', 'CategoriesController@activar');
+#region
+    // rutas de categorias
+    Route::get('/categoria', 'CategoriesController@index');
+    Route::post('/categoria/registrar', 'CategoriesController@store');
+    Route::put('/categoria/actualizar', 'CategoriesController@update');
+    Route::put('/categoria/desactivar', 'CategoriesController@desactivar');
+    Route::put('/categoria/activar', 'CategoriesController@activar');
+#endregion
 
+#region
+    // rutas de articulos
+    Route::get('/articulo', 'ArticuloController@index');
+    Route::post('/articulo/registrar', 'ArticuloController@store');
+    Route::put('/articulo/actualizar', 'ArticuloController@update');
+    Route::put('/articulo/desactivar', 'ArticuloController@desactivar');
+    Route::put('/articulo/activar', 'ArticuloController@activar');
+#endregion
