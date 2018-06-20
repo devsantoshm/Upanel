@@ -18,6 +18,7 @@ Route::get('/', function () {
 #region
     // rutas de categorias
     Route::get('/categoria', 'CategoriesController@index');
+    Route::get('/categoria/selectCategoria', 'CategoriesController@selectCategoria');
     Route::post('/categoria/registrar', 'CategoriesController@store');
     Route::put('/categoria/actualizar', 'CategoriesController@update');
     Route::put('/categoria/desactivar', 'CategoriesController@desactivar');

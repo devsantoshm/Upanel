@@ -241,10 +241,9 @@
                     });
             },
             selectCategoria(){
-                let me=this;
-                var url= '/categoria/selectCategoria';
+                let me = this;
+                var url = '/categoria/selectCategoria';
                 axios.get(url).then(function (response) {
-                    //console.log(response);
                     var respuesta= response.data;
                     me.arrayCategoria = respuesta.categorias;
                 })

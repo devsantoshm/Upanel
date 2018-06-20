@@ -9,7 +9,7 @@ use function PHPSTORM_META\elementType;
 class CategoriesController extends Controller
 {
     public function index(Request $request) {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
@@ -32,6 +32,17 @@ class CategoriesController extends Controller
                 'to'           => $categorias->lastItem(),
             ],
             'categorias' => $categorias
+        ];
+    }
+
+    public function selectCategoria(Request $request) {
+        if (!$request->ajax()) return redirect('/');
+        $categorias = Categoria::where('condicion','=','1')
+            ->select('id','nombre')
+            ->orderBy('nombre', 'asc')
+            ->get();
+        return [
+            'categorias' => $categorias,
         ];
     }
 
