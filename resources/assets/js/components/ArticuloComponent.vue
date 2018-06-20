@@ -51,7 +51,7 @@
                                     </button>
                                 </template>
                                 <template v-else>
-                                    <button type="button" class="btn btn-success btn-sm" @click="activarArticulo(articulo.id)">
+                                    <button type="button" class="btn btn-info btn-sm" @click="activarArticulo(articulo.id)">
                                         <i class="icon-check"></i>
                                     </button>
                                 </template>
@@ -116,6 +116,9 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Código</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="codigo" class="form-control" placeholder="Código de barras">
+                                    <barcode :value="codigo" :options="{ format: 'EAN-13' }">
+                                        Generando código de barras.
+                                    </barcode>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -167,6 +170,7 @@
 </template>
 
 <script>
+    import VueBarcode from 'vue-barcode';
     export default {
         data (){
             return {
@@ -197,6 +201,9 @@
                 buscar : '',
                 arrayCategoria :[]
             }
+        },
+        components: {
+            'barcode': VueBarcode
         },
         computed:{
             isActived: function(){
@@ -384,7 +391,7 @@
                 this.errorArticulo=0;
                 this.errorMostrarMsjArticulo =[];
 
-                if (this.idcategoria === 0) this.errorMostrarMsjArticulo.push("Seleccione una categoría.");
+                if (this.idcategoria==0) this.errorMostrarMsjArticulo.push("Seleccione una categoría.");
                 if (!this.nombre) this.errorMostrarMsjArticulo.push("El nombre del artículo no puede estar vacío.");
                 if (!this.stock) this.errorMostrarMsjArticulo.push("El stock del artículo debe ser un número y no puede estar vacío.");
                 if (!this.precio_venta) this.errorMostrarMsjArticulo.push("El precio venta del artículo debe ser un número y no puede estar vacío.");
@@ -394,9 +401,9 @@
                 return this.errorArticulo;
             },
             cerrarModal(){
-                this.modal = 0;
-                this.tituloModal ='';
-                this.idcategoria = 0;
+                this.modal=0;
+                this.tituloModal='';
+                this.idcategoria= 0;
                 this.nombre_categoria = '';
                 this.codigo = '';
                 this.nombre = '';
@@ -414,12 +421,12 @@
                             {
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Artículo';
-                                this.idcategoria = 0;
-                                this.nombre_categoria = '';
-                                this.codigo ='';
-                                this.nombre = '';
-                                this.precio_venta = 0;
-                                this.stock = 0;
+                                this.idcategoria=0;
+                                this.nombre_categoria='';
+                                this.codigo='';
+                                this.nombre= '';
+                                this.precio_venta=0;
+                                this.stock=0;
                                 this.descripcion = '';
                                 this.tipoAccion = 1;
                                 break;
@@ -427,16 +434,16 @@
                             case 'actualizar':
                             {
                                 //console.log(data);
-                                this.modal = 1;
-                                this.tituloModal = 'Actualizar Artículo';
-                                this.tipoAccion = 2;
-                                this.articulo_id = data['id'];
-                                this.idcategoria = data['idcategoria'];
-                                this.codigo = data['codigo'];
+                                this.modal=1;
+                                this.tituloModal='Actualizar Artículo';
+                                this.tipoAccion=2;
+                                this.articulo_id=data['id'];
+                                this.idcategoria=data['idcategoria'];
+                                this.codigo=data['codigo'];
                                 this.nombre = data['nombre'];
-                                this.stock = data['stock'];
-                                this.precio_venta = data['precio_venta'];
-                                this.descripcion = data['descripcion'];
+                                this.stock=data['stock'];
+                                this.precio_venta=data['precio_venta'];
+                                this.descripcion= data['descripcion'];
                                 break;
                             }
                         }
