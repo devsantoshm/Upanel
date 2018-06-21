@@ -51,7 +51,7 @@
                                     </button>
                                 </template>
                                 <template v-else>
-                                    <button type="button" class="btn btn-info btn-sm" @click="activarArticulo(articulo.id)">
+                                    <button type="button" class="btn btn-success btn-sm" @click="activarArticulo(articulo.id)">
                                         <i class="icon-check"></i>
                                     </button>
                                 </template>
