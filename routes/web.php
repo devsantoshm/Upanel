@@ -33,3 +33,10 @@ Route::get('/', function () {
     Route::put('/articulo/desactivar', 'ArticuloController@desactivar');
     Route::put('/articulo/activar', 'ArticuloController@activar');
 #endregion
+
+##region
+    // rutas de articulos
+    Route::get('/cliente', 'ClienteController@index');
+    Route::post('/cliente/registrar', 'ClienteController@store');
+    Route::put('/cliente/actualizar', 'ClienteController@update');
+#endregion
