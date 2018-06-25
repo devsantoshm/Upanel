@@ -9,4 +9,8 @@ class Persona extends Model
     protected $fillable = [
         'nombre', 'tipo_documento', 'num_documento', 'direccion', 'telefono', 'email'
     ];
+
+    public function proovedor() {
+        return $this->hasOne(Proovedor::class);
+    }
 }
