@@ -35,7 +35,7 @@ Route::get('/', function () {
 #endregion
 
 ##region
-    // rutas de articulos
+    // rutas de cliente
     Route::get('/cliente', 'ClienteController@index');
     Route::post('/cliente/registrar', 'ClienteController@store');
     Route::put('/cliente/actualizar', 'ClienteController@update');
