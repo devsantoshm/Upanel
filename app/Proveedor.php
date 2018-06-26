@@ -5,9 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Proovedor extends Model
+class Proveedor extends Model
 {
-    protected $table = 'proovedores';
+    protected $table = 'proveedores';
 
     protected $fillable = [
         'id', 'contacto', 'telefono_contacto'
