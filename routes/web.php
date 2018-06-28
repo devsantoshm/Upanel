@@ -47,3 +47,10 @@ Route::get('/', function () {
     Route::post('/proveedor/registrar', 'ProveedorController@store');
     Route::put('/proveedor/actualizar', 'ProveedorController@update');
 #endregion
+
+#region
+    // rutas de proveedores
+    Route::get('/rol', 'RolController@index');
+    Route::post('/rol/registrar', 'RolController@store');
+    Route::put('/rol/actualizar', 'RolController@update');
+#endregion
