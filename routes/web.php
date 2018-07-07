@@ -54,3 +54,12 @@ Route::get('/', function () {
     Route::post('/rol/registrar', 'RolController@store');
     Route::put('/rol/actualizar', 'RolController@update');
 #endregion
+
+#region
+    // rutas de usuarios
+    Route::get('/user', 'UserController@index');
+    Route::post('/user/registrar', 'UserlController@store');
+    Route::put('/user/actualizar', 'UserlController@update');
+    Route::put('/user/activar', 'UserlController@activar');
+    Route::put('/user/desactivar', 'UserlController@desactivar');
+#endregion
