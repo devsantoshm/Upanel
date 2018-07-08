@@ -54,7 +54,7 @@
                                     </button>
                                 </template>
                                 <template v-else>
-                                    <button type="button" class="btn btn-info btn-sm" @click="activarUsuario(persona.id)">
+                                    <button type="button" class="btn btn-success btn-sm" @click="activarUsuario(persona.id)">
                                         <i class="icon-check"></i>
                                     </button>
                                 </template>
@@ -196,7 +196,7 @@
             return {
                 persona_id: 0,
                 nombre : '',
-                tipo_documento : 'DNI',
+                tipo_documento : 'RUT',
                 num_documento : '',
                 direccion : '',
                 telefono : '',
@@ -270,7 +270,7 @@
                 let me=this;
                 var url= '/rol/selectRol';
                 axios.get(url).then(function (response) {
-                    var respuesta= response.data;
+                    var respuesta = response.data;
                     me.arrayRol = respuesta.roles;
                 })
                     .catch(function (error) {
@@ -335,31 +335,31 @@
                 });
             },
             validarPersona(){
-                this.errorPersona=0;
-                this.errorMostrarMsjPersona =[];
+                this.errorPersona = 0;
+                this.errorMostrarMsjPersona = [];
 
                 if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la persona no puede estar vacío.");
                 if (!this.usuario) this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
                 if (!this.password) this.errorMostrarMsjPersona.push("El password no puede estar vacío.");
-                if (this.idrol==0) this.errorMostrarMsjPersona.push("Debes seleccionar un rol para el usuario.");
+                if (this.idrol===0) this.errorMostrarMsjPersona.push("Debes seleccionar un rol para el usuario.");
 
                 if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
                 return this.errorPersona;
             },
             cerrarModal(){
-                this.modal=0;
-                this.tituloModal='';
+                this.modal = 0;
+                this.tituloModal = '';
                 this.nombre='';
-                this.tipo_documento='DNI';
-                this.num_documento='';
-                this.direccion='';
-                this.telefono='';
-                this.email='';
-                this.usuario='';
-                this.password='';
-                this.idrol=0;
-                this.errorPersona=0;
+                this.tipo_documento = 'RUT';
+                this.num_documento = '';
+                this.direccion = '';
+                this.telefono = '';
+                this.email = '';
+                this.usuario = '';
+                this.password = '';
+                this.idrol = 0;
+                this.errorPersona = 0;
 
             },
             abrirModal(modelo, accion, data = []){
@@ -373,7 +373,7 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Usuario';
                                 this.nombre= '';
-                                this.tipo_documento='DNI';
+                                this.tipo_documento='RUT';
                                 this.num_documento='';
                                 this.direccion='';
                                 this.telefono='';
@@ -386,11 +386,10 @@
                             }
                             case 'actualizar':
                             {
-                                //console.log(data);
-                                this.modal=1;
-                                this.tituloModal='Actualizar Usuario';
-                                this.tipoAccion=2;
-                                this.persona_id=data['id'];
+                                this.modal = 1;
+                                this.tituloModal = 'Actualizar Usuario';
+                                this.tipoAccion = 2;
+                                this.persona_id = data['id'];
                                 this.nombre = data['nombre'];
                                 this.tipo_documento = data['tipo_documento'];
                                 this.num_documento = data['num_documento'];

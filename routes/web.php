@@ -51,15 +51,14 @@ Route::get('/', function () {
 #region
     // rutas de proveedores
     Route::get('/rol', 'RolController@index');
-    Route::post('/rol/registrar', 'RolController@store');
-    Route::put('/rol/actualizar', 'RolController@update');
+    Route::get('/rol/selectRol', 'RolController@selectRol');
 #endregion
 
 #region
     // rutas de usuarios
     Route::get('/user', 'UserController@index');
-    Route::post('/user/registrar', 'UserlController@store');
-    Route::put('/user/actualizar', 'UserlController@update');
-    Route::put('/user/activar', 'UserlController@activar');
-    Route::put('/user/desactivar', 'UserlController@desactivar');
+    Route::post('/user/registrar', 'UserController@store');
+    Route::put('/user/actualizar', 'UserController@update');
+    Route::put('/user/activar', 'UserController@activar');
+    Route::put('/user/desactivar', 'UserController@desactivar');
 #endregion
