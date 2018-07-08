@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Usuarios
-                    <button type="button" @click="abrirModal('proveedor', 'registrar')" class="btn btn-secondary">
+                    <button type="button" @click="abrirModal('persona','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -22,8 +22,6 @@
                                     <option value="num_documento">Documento</option>
                                     <option value="email">Email</option>
                                     <option value="telefono">Teléfono</option>
-                                    <option value="contacto">Contacto</option>
-                                    <option value="telefono_contacto">Teléfono de contacto</option>
                                 </select>
                                 <input type="text" v-model="buscar" @keyup.enter="listarPersona(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                 <button type="submit" @click="listarPersona(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -41,16 +39,25 @@
                             <th>Teléfono</th>
                             <th>Email</th>
                             <th>Usuario</th>
-                            <th>Telefono</th>
                             <th>Rol</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="persona in arrayProveedor" :key="persona.id">
+                        <tr v-for="persona in arrayPersona" :key="persona.id">
                             <td>
-                                <button type="button" @click="abrirModal('proveedor', 'actualizar',persona)" class="btn btn-warning btn-sm">
+                                <button type="button" @click="abrirModal('persona','actualizar',persona)" class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
-                                </button>
+                                </button>&nbsp;
+                                <template v-if="persona.condicion">
+                                    <button type="button" class="btn btn-danger btn-sm" @click="desactivarUsuario(persona.id)">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <button type="button" class="btn btn-info btn-sm" @click="activarUsuario(persona.id)">
+                                        <i class="icon-check"></i>
+                                    </button>
+                                </template>
                             </td>
                             <td v-text="persona.nombre"></td>
                             <td v-text="persona.tipo_documento"></td>
@@ -59,7 +66,6 @@
                             <td v-text="persona.telefono"></td>
                             <td v-text="persona.email"></td>
                             <td v-text="persona.usuario"></td>
-                            <td v-text="persona.telefono"></td>
                             <td v-text="persona.rol"></td>
                         </tr>
                         </tbody>
@@ -136,19 +142,33 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="email-input">Contacto</label>
+                                <label class="col-md-3 form-control-label" for="email-input">Rol (*)</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="contacto" class="form-control" placeholder="Nombre del contacto">
-                                </div>
-                            </div><div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="email-input">Telefono del contacto</label>
-                                <div class="col-md-9">
-                                    <input type="tel" v-model="telefono_contacto" class="form-control" placeholder="telefono del contacto">
+                                    <select class="form-control" v-model="idrol">
+                                        <option value="0">Seleccione un rol</option>
+                                        <option v-for="rol in arrayRol" :key="rol.id" :value="rol.id" v-text="rol.nombre">
+
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
-                            <div v-show="errorProveedor" class="form-group row div-error">
+
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Usuario (*)</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="usuario" class="form-control" placeholder="Nombre de usuario">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Password (*)</label>
+                                <div class="col-md-9">
+                                    <input type="password" v-model="password" class="form-control" placeholder="Password de acceso">
+                                </div>
+                            </div>
+
+                            <div v-show="errorPersona" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjProveedor" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMsjPersona" :key="error" v-text="error">
 
                                     </div>
                                 </div>
@@ -158,8 +178,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarProveedor()">Guardar</button>
-                        <button type="button" v-if="tipoAccion === 2" class="btn btn-primary" @click="actualizarProveedor()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -174,23 +194,24 @@
     export default {
         data (){
             return {
-                proveedor_id: 0,
-                nombre: '',
-                tipo_documento: 'DNI',
-                num_documento: '',
-                direccion: '',
-                telefono: '',
-                email: '',
-                usuario: '',
-                password: '',
-                idrol: 0,
-                arrayProveedor: [],
-                modal: 0,
-                tituloModal: '',
-                tipoAccion: 0,
-                errorProveedor: 0,
-                errorMostrarMsjProveedor: [],
-                pagination: {
+                persona_id: 0,
+                nombre : '',
+                tipo_documento : 'DNI',
+                num_documento : '',
+                direccion : '',
+                telefono : '',
+                email : '',
+                usuario : '',
+                password : '',
+                idrol : 0,
+                arrayPersona : [],
+                arrayRol : [],
+                modal : 0,
+                tituloModal : '',
+                tipoAccion : 0,
+                errorPersona : 0,
+                errorMostrarMsjPersona : [],
+                pagination : {
                     'total' : 0,
                     'current_page' : 0,
                     'per_page' : 0,
@@ -198,12 +219,12 @@
                     'from' : 0,
                     'to' : 0,
                 },
-                offset: 3,
-                criterio: 'nombre',
-                buscar: ''
+                offset : 3,
+                criterio : 'nombre',
+                buscar : ''
             }
         },
-        computed: {
+        computed:{
             isActived: function(){
                 return this.pagination.current_page;
             },
@@ -232,14 +253,25 @@
 
             }
         },
-        methods: {
-            listarPersona (page, buscar, criterio){
-                let me = this;
-                var url = '/user?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+        methods : {
+            listarPersona (page,buscar,criterio){
+                let me=this;
+                var url= '/user?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
-                    me.arrayProveedor = respuesta.personas.data;
+                    me.arrayPersona = respuesta.personas.data;
                     me.pagination= respuesta.pagination;
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            selectRol(){
+                let me=this;
+                var url= '/rol/selectRol';
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    me.arrayRol = respuesta.roles;
                 })
                     .catch(function (error) {
                         console.log(error);
@@ -252,22 +284,24 @@
                 //Envia la petición para visualizar la data de esa página
                 me.listarPersona(page,buscar,criterio);
             },
-            registrarProveedor(){
-                if (this.validarProveedor()){
+            registrarPersona(){
+                if (this.validarPersona()){
                     return;
                 }
 
                 let me = this;
 
-                axios.post('/proveedor/registrar', {
+                axios.post('/user/registrar',{
                     'nombre': this.nombre,
                     'tipo_documento': this.tipo_documento,
                     'num_documento' : this.num_documento,
                     'direccion' : this.direccion,
                     'telefono' : this.telefono,
                     'email' : this.email,
-                    'contacto' : this.contacto,
-                    'telefono_contacto' : this.telefono_contacto
+                    'usuario': this.usuario,
+                    'password': this.password,
+                    'idrol' : this.idrol
+
                 }).then(function (response) {
                     me.cerrarModal();
                     me.listarPersona(1,'','nombre');
@@ -275,23 +309,24 @@
                     console.log(error);
                 });
             },
-            actualizarProveedor(){
-                if (this.validarProveedor()){
+            actualizarPersona(){
+                if (this.validarPersona()){
                     return;
                 }
 
                 let me = this;
 
-                axios.put('/proveedor/actualizar', {
+                axios.put('/user/actualizar',{
                     'nombre': this.nombre,
                     'tipo_documento': this.tipo_documento,
                     'num_documento' : this.num_documento,
                     'direccion' : this.direccion,
                     'telefono' : this.telefono,
                     'email' : this.email,
-                    'contacto' : this.contacto,
-                    'telefono_contacto' : this.telefono_contacto,
-                    'id': this.proveedor_id
+                    'usuario': this.usuario,
+                    'password': this.password,
+                    'idrol' : this.idrol,
+                    'id': this.persona_id
                 }).then(function (response) {
                     me.cerrarModal();
                     me.listarPersona(1,'','nombre');
@@ -299,69 +334,155 @@
                     console.log(error);
                 });
             },
-            validarProveedor(){
-                this.errorProveedor = 0;
-                this.errorMostrarMsjProveedor = [];
+            validarPersona(){
+                this.errorPersona=0;
+                this.errorMostrarMsjPersona =[];
 
-                if (!this.nombre) this.errorMostrarMsjProveedor.push("El nombre del proveedor no puede estar vacío.");
+                if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la persona no puede estar vacío.");
+                if (!this.usuario) this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
+                if (!this.password) this.errorMostrarMsjPersona.push("El password no puede estar vacío.");
+                if (this.idrol==0) this.errorMostrarMsjPersona.push("Debes seleccionar un rol para el usuario.");
 
-                if (this.errorMostrarMsjProveedor.length) this.errorProveedor = 1;
+                if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
-                return this.errorProveedor;
+                return this.errorPersona;
             },
             cerrarModal(){
-                this.modal = 0;
-                this.tituloModal = '';
-                this.nombre = '';
-                this.tipo_documento = 'RUT';
-                this.num_documento = '';
-                this.direccion = '';
-                this.telefono  ='';
-                this.email = '';
-                this.contacto = '';
-                this.telefono_contacto = '';
-                this.errorProveedor = 0;
+                this.modal=0;
+                this.tituloModal='';
+                this.nombre='';
+                this.tipo_documento='DNI';
+                this.num_documento='';
+                this.direccion='';
+                this.telefono='';
+                this.email='';
+                this.usuario='';
+                this.password='';
+                this.idrol=0;
+                this.errorPersona=0;
 
             },
-            abrirModal(modelo, accion, data = []) {
-                switch(modelo) {
-                    case "proveedor": {
-
+            abrirModal(modelo, accion, data = []){
+                this.selectRol();
+                switch(modelo){
+                    case "persona":
+                    {
                         switch(accion){
-
-                            case 'registrar': {
+                            case 'registrar':
+                            {
                                 this.modal = 1;
-                                this.tituloModal = 'Registrar Proveedor';
-                                this.nombre = '';
-                                this.tipo_documento = 'RUT';
-                                this.num_documento = '';
-                                this.direccion = '';
-                                this.telefono = '';
-                                this.email = '';
-                                this.contacto = '';
-                                this.telefono_contacto = '';
+                                this.tituloModal = 'Registrar Usuario';
+                                this.nombre= '';
+                                this.tipo_documento='DNI';
+                                this.num_documento='';
+                                this.direccion='';
+                                this.telefono='';
+                                this.email='';
+                                this.usuario='';
+                                this.password='';
+                                this.idrol=0;
                                 this.tipoAccion = 1;
                                 break;
                             }
-                            case 'actualizar': {
-
-                                this.modal = 1;
-                                this.tituloModal  ='Actualizar Proveedor';
-                                this.tipoAccion = 2;
-                                this.proveedor_id = data['id'];
+                            case 'actualizar':
+                            {
+                                //console.log(data);
+                                this.modal=1;
+                                this.tituloModal='Actualizar Usuario';
+                                this.tipoAccion=2;
+                                this.persona_id=data['id'];
                                 this.nombre = data['nombre'];
                                 this.tipo_documento = data['tipo_documento'];
                                 this.num_documento = data['num_documento'];
                                 this.direccion = data['direccion'];
                                 this.telefono = data['telefono'];
                                 this.email = data['email'];
-                                this.contacto = data['contacto'];
-                                this.telefono_contacto = data['telefono_contacto'];
+                                this.usuario = data['usuario'];
+                                this.password = data['password'];
+                                this.idrol = data['idrol'];
                                 break;
                             }
                         }
                     }
                 }
+            },
+            desactivarUsuario(id){
+                swal({
+                    title: 'Esta seguro de desactivar este usuario?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Aceptar!',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+
+                        axios.put('/user/desactivar',{
+                            'id': id
+                        }).then(function (response) {
+                            me.listarPersona(1,'','nombre');
+                            swal(
+                                'Desactivado!',
+                                'El registro ha sido desactivado con éxito.',
+                                'success'
+                            )
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+
+
+                    } else if (
+                        // Read more about handling dismissals
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
+
+                    }
+                })
+            },
+            activarUsuario(id){
+                swal({
+                    title: 'Esta seguro de activar este usuario?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Aceptar!',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+
+                        axios.put('/user/activar',{
+                            'id': id
+                        }).then(function (response) {
+                            me.listarPersona(1,'','nombre');
+                            swal(
+                                'Activado!',
+                                'El registro ha sido activado con éxito.',
+                                'success'
+                            )
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+
+
+                    } else if (
+                        // Read more about handling dismissals
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
+
+                    }
+                })
             }
         },
         mounted() {
