@@ -62,3 +62,10 @@ Route::get('/', function () {
     Route::put('/user/activar', 'UserController@activar');
     Route::put('/user/desactivar', 'UserController@desactivar');
 #endregion
+
+#region
+    // auth
+    Auth::routes();
+    Route::get('/home', 'HomeController@index')->name('home');
+#endregion
+
