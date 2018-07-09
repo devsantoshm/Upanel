@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/main', function () {
     return view('contenido.contenido');
-});
+})->name('main');
 
 #region
     // rutas de categorias
@@ -65,7 +65,8 @@ Route::get('/', function () {
 
 #region
     // auth
-    Auth::routes();
+    Route::get('/', 'Auth\LoginController@showLoginForm');
+    Route::post('/login', 'Auth\LoginController@login')->name('login');
     Route::get('/home', 'HomeController@index')->name('home');
 #endregion
 
