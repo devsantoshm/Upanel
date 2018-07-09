@@ -95,7 +95,6 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Tipo Documento</label>
                                 <div class="col-md-9">
                                     <select v-model="tipo_documento" class="form-control">
-                                        <option value="DNI">DNI</option>
                                         <option value="CEDULA DE CIUDADANIA">Cédula de ciudadanía</option>
                                         <option value="RUT">Rut</option>
                                         <option value="NIT">Nit</option>
@@ -139,8 +138,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
+                        <button type="button" v-if="tipoAccion === 2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -157,7 +156,7 @@
             return {
                 persona_id: 0,
                 nombre: '',
-                tipo_documento: 'DNI',
+                tipo_documento: 'RUT',
                 num_documento: '',
                 direccion: '',
                 telefono: '',
@@ -287,7 +286,7 @@
                 this.modal = 0;
                 this.tituloModal = '';
                 this.nombre = '';
-                this.tipo_documento = 'DNI';
+                this.tipo_documento = 'RUT';
                 this.num_documento = '';
                 this.direccion = '';
                 this.telefono  ='';
@@ -305,7 +304,7 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Cliente';
                                 this.nombre = '';
-                                this.tipo_documento = 'DNI';
+                                this.tipo_documento = 'RUT';
                                 this.num_documento = '';
                                 this.direccion = '';
                                 this.telefono = '';

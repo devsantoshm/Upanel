@@ -22,8 +22,6 @@
                                     <option value="num_documento">Documento</option>
                                     <option value="email">Email</option>
                                     <option value="telefono">Teléfono</option>
-                                    <option value="contacto">Contacto</option>
-                                    <option value="telefono_contacto">Teléfono de contacto</option>
                                 </select>
                                 <input type="text" v-model="buscar" @keyup.enter="listarProveedor(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                 <button type="submit" @click="listarProveedor(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -41,7 +39,6 @@
                             <th>Teléfono</th>
                             <th>Email</th>
                             <th>Contacto</th>
-                            <th>Número de contacto</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -58,7 +55,6 @@
                             <td v-text="persona.telefono"></td>
                             <td v-text="persona.email"></td>
                             <td v-text="persona.contacto"></td>
-                            <td v-text="persona.telefono_contacto"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -101,7 +97,6 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Tipo Documento</label>
                                 <div class="col-md-9">
                                     <select v-model="tipo_documento" class="form-control">
-                                        <option value="DNI">DNI</option>
                                         <option value="CEDULA DE CIUDADANIA">Cédula de ciudadanía</option>
                                         <option value="RUT">Rut</option>
                                         <option value="NIT">Nit</option>
@@ -174,7 +169,7 @@
             return {
                 proveedor_id: 0,
                 nombre: '',
-                tipo_documento: 'DNI',
+                tipo_documento: 'RUT',
                 num_documento: '',
                 direccion: '',
                 telefono: '',

@@ -23,8 +23,8 @@
                                     <option value="email">Email</option>
                                     <option value="telefono">Teléfono</option>
                                 </select>
-                                <input type="text" v-model="buscar" @keyup.enter="listarPersona(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
-                                <button type="submit" @click="listarPersona(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" v-model="buscar" @keyup.enter="listarPersona(1, buscar, criterio)" class="form-control" placeholder="Texto a buscar">
+                                <button type="submit" @click="listarPersona(1, buscar, criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,6 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Tipo Documento</label>
                                 <div class="col-md-9">
                                     <select v-model="tipo_documento" class="form-control">
-                                        <option value="DNI">DNI</option>
                                         <option value="CEDULA DE CIUDADANIA">Cédula de ciudadanía</option>
                                         <option value="RUT">Rut</option>
                                         <option value="NIT">Nit</option>
@@ -178,8 +177,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
+                        <button type="button" v-if="tipoAccion === 2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -351,7 +350,7 @@
                 this.modal = 0;
                 this.tituloModal = '';
                 this.nombre='';
-                this.tipo_documento = 'RUT';
+                this.tipo_documento = 'CEDULA DE CIUDADANIA';
                 this.num_documento = '';
                 this.direccion = '';
                 this.telefono = '';
@@ -373,14 +372,14 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Usuario';
                                 this.nombre= '';
-                                this.tipo_documento='RUT';
-                                this.num_documento='';
-                                this.direccion='';
-                                this.telefono='';
-                                this.email='';
-                                this.usuario='';
-                                this.password='';
-                                this.idrol=0;
+                                this.tipo_documento = 'CEDULA DE CIUDADANIA';
+                                this.num_documento = '';
+                                this.direccion = '';
+                                this.telefono = '';
+                                this.email = '';
+                                this.usuario = '';
+                                this.password = '';
+                                this.idrol = 0;
                                 this.tipoAccion = 1;
                                 break;
                             }
