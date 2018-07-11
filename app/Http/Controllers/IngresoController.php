@@ -18,7 +18,7 @@ class IngresoController extends Controller
         $criterio = $request->criterio;
 
         if ($buscar == ''){
-            $ingresos = Ingreso::join('personas', 'ingresos.idproveedor', '=' , 'personas.id')
+            $ingresos = Ingreso::join('personas', 'ingresos.idproveedor', '=', 'personas.id')
                 ->join('users', 'ingresos.idusuario', '=', 'users.id')
                 ->select(
                     'ingresos.id',
@@ -30,14 +30,13 @@ class IngresoController extends Controller
                     'ingresos.total',
                     'ingresos.estado',
                     'personas.nombre',
-                    'users.usuario'
-                )
+                    'users.usuario')
                 ->orderBy('ingresos.id', 'desc')
                 ->paginate(3);
         }
         else{
-            $ingresos = Ingreso::join('personas', 'ingresos.idproveedor', '=' , 'personas.id')
-                ->join('users', 'ingresos.idusuario', '=', 'users.id')
+            $ingresos = Ingreso::join('personas','ingresos.idproveedor','=','personas.id')
+                ->join('users','ingresos.idusuario','=','users.id')
                 ->select(
                     'ingresos.id',
                     'ingresos.tipo_comprobante',
@@ -48,13 +47,11 @@ class IngresoController extends Controller
                     'ingresos.total',
                     'ingresos.estado',
                     'personas.nombre',
-                    'user.usuario'
-                )
+                    'users.usuario')
                 ->where('ingresos.'.$criterio, 'like', '%'. $buscar . '%')
                 ->orderBy('ingresos.id', 'desc')
                 ->paginate(3);
         }
-
 
         return [
             'pagination' => [
@@ -89,30 +86,29 @@ class IngresoController extends Controller
             $ingreso->estado = 'Registrado';
             $ingreso->save();
 
-            $detalles = $request->data;
-            $detalle = new DetalleIngreso();
+            $detalles = $request->data;//Array de detalles
+            //Recorro todos los elementos
 
-            foreach ( $detalles as $ep => $det) {
+            foreach($detalles as $ep=>$det)
+            {
+                $detalle = new DetalleIngreso();
                 $detalle->idingreso = $ingreso->id;
-                $detalle->idingreso = $det['idarticulo'];
+                $detalle->idarticulo = $det['idarticulo'];
                 $detalle->cantidad = $det['cantidad'];
                 $detalle->precio = $det['precio'];
                 $detalle->save();
             }
 
             DB::commit();
-
-        }catch (Exception $exception) {
+        } catch (Exception $e){
             DB::rollBack();
         }
     }
 
     public function desactivar(Request $request) {
         if (!$request->ajax()) return redirect('/');
-
         $ingreso = Ingreso::findOrFail($request->id);
         $ingreso->estado = 'Anulado';
         $ingreso->save();
     }
-
 }
