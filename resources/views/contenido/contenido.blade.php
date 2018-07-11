@@ -17,7 +17,7 @@
                 </template>
 
                 <template v-if="menu === 3">
-                    <h1>ingresos-component</h1>
+                    <ingreso-component></ingreso-component>
                 </template>
 
                 <template v-if="menu === 4">
@@ -89,7 +89,7 @@
                 </template>
 
                 <template v-if="menu === 3">
-                    <h1>ingresos-component</h1>
+                    <ingreso-component></ingreso-component>
                 </template>
 
                 <template v-if="menu === 4">
