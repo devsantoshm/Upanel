@@ -92,14 +92,20 @@
                         <div class="form-group row border">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label for="">Proveedor(*)</label>
-                                    <select class="form-control">
+                                    <label>Proveedor(*)</label>
+                                    <v-select
+                                            :on-search="selectProveedor"
+                                            label="nombre"
+                                            :options="arrayProveedor"
+                                            placeholder="Buscar Proveedores..."
+                                            :onChange="getDatosProveedor"
+                                    >
 
-                                    </select>
+                                    </v-select>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <label for="">Impuesto(*)</label>
+                                <label>Impuesto(*)</label>
                                 <input type="text" class="form-control" v-model="impuesto">
                             </div>
                             <div class="col-md-4">
@@ -248,8 +254,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
+                        <button type="button" v-if="tipoAccion === 2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -261,6 +267,7 @@
 </template>
 
 <script>
+    import vSelect from 'vue-select';
     export default {
         data (){
             return {
@@ -273,6 +280,7 @@
                 impuesto: 0.18,
                 total:0.0,
                 arrayIngreso : [],
+                arrayProveedor: [],
                 arrayDetalle : [],
                 listado:1,
                 modal : 0,
@@ -292,6 +300,9 @@
                 criterio : 'num_comprobante',
                 buscar : ''
             }
+        },
+        components: {
+            vSelect
         },
         computed:{
             isActived: function(){
@@ -335,17 +346,25 @@
                         console.log(error);
                     });
             },
-            selectRol(){
-                let me=this;
-                var url= '/rol/selectRol';
+            selectProveedor(search,loading){
+                let me = this;
+                loading(true)
+
+                var url= '/proveedor/selectProveedor?filtro='+search;
                 axios.get(url).then(function (response) {
-                    //console.log(response);
-                    var respuesta= response.data;
-                    me.arrayRol = respuesta.roles;
+                    let respuesta = response.data;
+                    q: search
+                    me.arrayProveedor = respuesta.proveedores;
+                    loading(false)
                 })
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            getDatosProveedor(val1){
+                let me = this;
+                me.loading = true;
+                me.idproveedor = val1.id;
             },
 
             cambiarPagina(page,buscar,criterio){
