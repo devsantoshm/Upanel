@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/articulo/actualizar', 'ArticuloController@update');
         Route::put('/articulo/desactivar', 'ArticuloController@desactivar');
         Route::put('/articulo/activar', 'ArticuloController@activar');
+        Route::get('/articulo/buscarArticulo', 'ArticuloController@buscarArticulo');
 
         // rutas de proveedores
         Route::get('/proveedor', 'ProveedorController@index');
@@ -79,6 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/articulo/actualizar', 'ArticuloController@update');
         Route::put('/articulo/desactivar', 'ArticuloController@desactivar');
         Route::put('/articulo/activar', 'ArticuloController@activar');
+        Route::get('/articulo/buscarArticulo', 'ArticuloController@buscarArticulo');
 
         // rutas de proveedores
         Route::get('/proveedor', 'ProveedorController@index');

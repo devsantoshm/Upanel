@@ -137,8 +137,9 @@
                                 <div class="form-group">
                                     <label>Artículo</label>
                                     <div class="form-inline">
-                                        <input type="text" class="form-control" v-model="idarticulo" placeholder="Ingrese artículo">
+                                        <input type="text" class="form-control" v-model="codigo" @keyup.enter="buscarArticulo()" placeholder="Ingrese artículo">
                                         <button class="btn btn-primary">...</button>
+                                        <input type="text" readonly class="form-control" v-model="articulo">
                                     </div>
                                 </div>
                             </div>
@@ -298,7 +299,13 @@
                 },
                 offset : 3,
                 criterio : 'num_comprobante',
-                buscar : ''
+                buscar : '',
+                arrayArticulo : [],
+                idarticulo : 0,
+                codigo : '',
+                articulo : '',
+                precio : 0,
+                cantidad : 0,
             }
         },
         components: {
@@ -365,6 +372,27 @@
                 let me = this;
                 me.loading = true;
                 me.idproveedor = val1.id;
+            },
+
+            buscarArticulo() {
+                let me = this;
+                var url=  '/articulo/buscarArticulo?filtro=' + me.codigo;
+
+                axios.get(url).then(function (response) {
+                   var respuesta = response.data;
+                   me.arrayArticulo = respuesta.articulos;
+
+                   if (me.arrayArticulo.length > 0) {
+                       me.articulo = me.arrayArticulo[0]['nombre'];
+                       me.idarticulo = me.arrayArticulo[0]['id'];
+                   } else {
+                       me.articulo = 'No exíste un articulo que coincida.';
+                       me.idarticulo = 0;
+                   }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
 
             cambiarPagina(page,buscar,criterio){
