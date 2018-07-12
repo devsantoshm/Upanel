@@ -9,79 +9,227 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Ingresos
-                    <button type="button" @click="abrirModal('ingreso','registrar')" class="btn btn-secondary">
+                    <button type="button" @click="mostrarDetalle()" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <select class="form-control col-md-3" v-model="criterio">
-                                    <option value="tipo_comprobante">Tipo Comprobante</option>
-                                    <option value="num_comprobante">Número Comprobante</option>
-                                    <option value="fecha_hora">Fecha-Hora</option>
-                                </select>
-                                <input type="text" v-model="buscar" @keyup.enter="listarIngreso(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
-                                <button type="submit" @click="listarIngreso(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                <!-- Listado-->
+                <template v-if="listado">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select class="form-control col-md-3" v-model="criterio">
+                                        <option value="tipo_comprobante">Tipo Comprobante</option>
+                                        <option value="num_comprobante">Número Comprobante</option>
+                                        <option value="fecha_hora">Fecha-Hora</option>
+                                    </select>
+                                    <input type="text" v-model="buscar" @keyup.enter="listarIngreso(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" @click="listarIngreso(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th>Opciones</th>
+                                    <th>Usuario</th>
+                                    <th>Proveedor</th>
+                                    <th>Tipo Comprobante</th>
+                                    <th>Serie Comprobante</th>
+                                    <th>Número Comprobante</th>
+                                    <th>Fecha Hora</th>
+                                    <th>Total</th>
+                                    <th>Impuesto</th>
+                                    <th>Estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="ingreso in arrayIngreso" :key="ingreso.id">
+                                    <td>
+                                        <button type="button" @click="abrirModal('ingreso','actualizar',ingreso)" class="btn btn-success btn-sm">
+                                            <i class="icon-eye"></i>
+                                        </button> &nbsp;
+                                        <template v-if="ingreso.estado=='Registrado'">
+                                            <button type="button" class="btn btn-danger btn-sm" @click="desactivarIngreso(ingreso.id)">
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                        </template>
+                                    </td>
+                                    <td v-text="ingreso.usuario"></td>
+                                    <td v-text="ingreso.nombre"></td>
+                                    <td v-text="ingreso.tipo_comprobante"></td>
+                                    <td v-text="ingreso.serie_comprobante"></td>
+                                    <td v-text="ingreso.num_comprobante"></td>
+                                    <td v-text="ingreso.fecha_hora"></td>
+                                    <td v-text="ingreso.total"></td>
+                                    <td v-text="ingreso.impuesto"></td>
+                                    <td v-text="ingreso.estado"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item" v-if="pagination.current_page > 1">
+                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
+                                </li>
+                                <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
+                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
+                                </li>
+                                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </template>
+                <!--Fin Listado-->
+                <!-- Detalle-->
+                <template v-else>
+                    <div class="card-body">
+                        <div class="form-group row border">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="">Proveedor(*)</label>
+                                    <select class="form-control">
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="">Impuesto(*)</label>
+                                <input type="text" class="form-control" v-model="impuesto">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Tipo Comprobante(*)</label>
+                                    <select class="form-control" v-model="tipo_comprobante">
+                                        <option value="0">Seleccione</option>
+                                        <option value="BOLETA">Boleta</option>
+                                        <option value="FACTURA">Factura</option>
+                                        <option value="TICKET">Ticket</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Serie Comprobante</label>
+                                    <input type="text" class="form-control" v-model="serie_comprobante" placeholder="000x">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Número Comprobante(*)</label>
+                                    <input type="text" class="form-control" v-model="num_comprobante" placeholder="000xx">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row border">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Artículo</label>
+                                    <div class="form-inline">
+                                        <input type="text" class="form-control" v-model="idarticulo" placeholder="Ingrese artículo">
+                                        <button class="btn btn-primary">...</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Precio</label>
+                                    <input type="number" value="0" step="any" class="form-control" v-model="precio">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Cantidad</label>
+                                    <input type="number" value="0" class="form-control" v-model="cantidad">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button class="btn btn-success form-control btnagregar"><i class="icon-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row border">
+                            <div class="table-responsive col-md-12">
+                                <table class="table table-bordered table-striped table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>Opciones</th>
+                                        <th>Artículo</th>
+                                        <th>Precio</th>
+                                        <th>Cantidad</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm">
+                                                <i class="icon-close"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            Artículo n
+                                        </td>
+                                        <td>
+                                            <input type="number" value="3" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input type="number" value="2" class="form-control">
+                                        </td>
+                                        <td>
+                                            $ 6.00
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm">
+                                                <i class="icon-close"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            Artículo n
+                                        </td>
+                                        <td>
+                                            <input type="number" value="3" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input type="number" value="2" class="form-control">
+                                        </td>
+                                        <td>
+                                            $ 6.00
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color: #CEECF5;">
+                                        <td colspan="4" align="right"><strong>Total Parcial:</strong></td>
+                                        <td>$ 5</td>
+                                    </tr>
+                                    <tr style="background-color: #CEECF5;">
+                                        <td colspan="4" align="right"><strong>Total Impuesto:</strong></td>
+                                        <td>$ 1</td>
+                                    </tr>
+                                    <tr style="background-color: #CEECF5;">
+                                        <td colspan="4" align="right"><strong>Total Neto:</strong></td>
+                                        <td>$ 6</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button type="button" @click="ocultarDetalle()" class="btn btn-secondary">Cerrar</button>
+                                <button type="button" class="btn btn-primary" @click="registrarIngreso()">Registrar Compra</button>
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-sm">
-                            <thead>
-                            <tr>
-                                <th>Opciones</th>
-                                <th>Usuario</th>
-                                <th>Proveedor</th>
-                                <th>Tipo Comprobante</th>
-                                <th>Serie Comprobante</th>
-                                <th>Número Comprobante</th>
-                                <th>Fecha Hora</th>
-                                <th>Total</th>
-                                <th>Impuesto</th>
-                                <th>Estado</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="ingreso in arrayIngreso" :key="ingreso.id">
-                                <td>
-                                    <button type="button" @click="abrirModal('ingreso','actualizar',ingreso)" class="btn btn-success btn-sm">
-                                        <i class="icon-eye"></i>
-                                    </button> &nbsp;
-                                    <template v-if="ingreso.estado=='Registrado'">
-                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarIngreso(ingreso.id)">
-                                            <i class="icon-trash"></i>
-                                        </button>
-                                    </template>
-                                </td>
-                                <td v-text="ingreso.usuario"></td>
-                                <td v-text="ingreso.nombre"></td>
-                                <td v-text="ingreso.tipo_comprobante"></td>
-                                <td v-text="ingreso.serie_comprobante"></td>
-                                <td v-text="ingreso.num_comprobante"></td>
-                                <td v-text="ingreso.fecha_hora"></td>
-                                <td v-text="ingreso.total"></td>
-                                <td v-text="ingreso.impuesto"></td>
-                                <td v-text="ingreso.estado"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item" v-if="pagination.current_page > 1">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
-                            </li>
-                            <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
-                            </li>
-                            <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                </template>
+                <!-- Fin Detalle-->
             </div>
             <!-- Fin ejemplo de tabla Listado -->
         </div>
@@ -126,7 +274,7 @@
                 total:0.0,
                 arrayIngreso : [],
                 arrayDetalle : [],
-
+                listado:1,
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
@@ -268,6 +416,12 @@
                 if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
                 return this.errorPersona;
+            },
+            mostrarDetalle(){
+                this.listado=0;
+            },
+            ocultarDetalle(){
+                this.listado=1;
             },
             cerrarModal(){
                 this.modal=0;
