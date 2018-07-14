@@ -174,9 +174,9 @@
                                     </tr>
                                     </thead>
                                     <tbody v-if="arrayDetalle.length">
-                                    <tr v-for="detalle in arrayDetalle" :key="detalle.id">
+                                    <tr v-for="(detalle, index) in arrayDetalle" :key="detalle.id">
                                         <td>
-                                            <button type="button" class="btn btn-danger btn-sm">
+                                            <button @click="eliminarDetalle(index)" type="button" class="btn btn-danger btn-sm">
                                                 <i class="icon-close"></i>
                                             </button>
                                         </td>
@@ -417,16 +417,19 @@
                 }
             },
 
+            eliminarDetalle(index) {
+                let me = this;
+                me.arrayDetalle.splice(index, 1);
+            },
+
             encuentra(id) {
-
+                let sw = 0;
                 for (let i = 0; i < this.arrayDetalle.length; i++) {
-
                     if (this.arrayDetalle[i].idarticulo === id) {
-                        return true;
-                    } else {
-                        return false
+                        sw = true;
                     }
                 }
+                return sw;
             },
 
             registrarPersona(){
