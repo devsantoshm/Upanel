@@ -23,6 +23,12 @@ class CreateUsersTable extends Migration
             $table->foreign('idrol')->references('id')->on('roles');
             $table->rememberToken();
         });
+        DB::table('users')->insert(array('id'=>'1',
+            'usuario'=>'administrador',
+            'password'=>'$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', //secret
+            'idrol'=>'1',
+    ));
+
     }
 
     /**
