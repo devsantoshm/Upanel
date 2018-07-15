@@ -131,6 +131,15 @@
                                     <input type="text" class="form-control" v-model="num_comprobante" placeholder="000xx">
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div v-show="errorIngreso" class="form-group row div-error">
+                                    <div class="text-center text-error">
+                                        <div v-for="error in errorMostrarMsjIngreso" :key="error" v-text="error">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row border">
                             <div class="col-md-6">
@@ -290,7 +299,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
+                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarIngreso()">Guardar</button>
                         <button type="button" v-if="tipoAccion === 2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
                     </div>
                 </div>
@@ -529,33 +538,40 @@
                 return sw;
             },
 
-            registrarPersona(){
-                if (this.validarPersona()){
+            registrarIngreso(){
+                if (this.validarIngreso()){
                     return;
                 }
 
                 let me = this;
 
-                axios.post('/user/registrar',{
-                    'nombre': this.nombre,
-                    'tipo_documento': this.tipo_documento,
-                    'num_documento' : this.num_documento,
-                    'direccion' : this.direccion,
-                    'telefono' : this.telefono,
-                    'email' : this.email,
-                    'idrol' : this.idrol,
-                    'usuario': this.usuario,
-                    'password': this.password
-
+                axios.post('/ingreso/registrar',{
+                    'idproveedor': this.idproveedor,
+                    'tipo_comprobante': this.tipo_comprobante,
+                    'serie_comprobante' : this.serie_comprobante,
+                    'num_comprobante' : this.num_comprobante,
+                    'impuesto' : this.impuesto,
+                    'total' : this.total,
+                    'data' : this.arrayDetalle,
                 }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarPersona(1,'','nombre');
+                    me.listado = 1;
+                    me.listarIngreso(1,'','num_comprobante');
+                    me.idproveedor = 0;
+                    me.tipo_comprobante = 'BOLETA';
+                    me.serie_comprobante = '';
+                    me.num_comprobante = '';
+                    me.impuesto = 0.18;
+                    me.idarticulo = 0;
+                    me.articulo = '';
+                    me.precio = 0;
+                    me.cantidad = 0;
+                    me.arrayDetalle = [];
                 }).catch(function (error) {
                     console.log(error);
                 });
             },
             actualizarPersona(){
-                if (this.validarPersona()){
+                if (this.validarIngreso()){
                     return;
                 }
 
@@ -579,20 +595,33 @@
                     console.log(error);
                 });
             },
-            validarPersona(){
-                this.errorPersona=0;
-                this.errorMostrarMsjPersona =[];
+            validarIngreso(){
+                this.errorIngreso = 0;
+                this.errorMostrarMsjIngreso = [];
 
-                if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la pesona no puede estar vacío.");
-                if (!this.usuario) this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
-                if (!this.password) this.errorMostrarMsjPersona.push("La password del usuario no puede estar vacía.");
-                if (this.idrol==0) this.errorMostrarMsjPersona.push("Seleccione una Role.");
-                if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
+                if ( this.idproveedor === 0) this.errorMostrarMsjIngreso.push("Selecciones un proveedor");
+                if ( this.tipo_comprobante === 0) this.errorMostrarMsjIngreso.push("Selecciones el comprobante");
+                if ( !this.num_comprobante) this.errorMostrarMsjIngreso.push("Ingrese el número de comprobante");
+                if ( !this.impuesto) this.errorMostrarMsjIngreso.push("Ingrese el impuesto de compra");
+                if ( this.arrayDetalle.length <= 0) this.errorMostrarMsjIngreso.push("Ingrese articulos al detalle");
 
-                return this.errorPersona;
+                if (this.errorMostrarMsjIngreso.length) this.errorIngreso = 1;
+
+                return this.errorIngreso;
             },
             mostrarDetalle(){
+                let me = this;
                 this.listado=0;
+                me.idproveedor = 0;
+                me.tipo_comprobante = 'BOLETA';
+                me.serie_comprobante = '';
+                me.num_comprobante = '';
+                me.impuesto = 0.18;
+                me.idarticulo = 0;
+                me.articulo = '';
+                me.precio = 0;
+                me.cantidad = 0;
+                me.arrayDetalle = [];
             },
             ocultarDetalle(){
                 this.listado=1;
