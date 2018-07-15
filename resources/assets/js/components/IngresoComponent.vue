@@ -138,7 +138,7 @@
                                     <label>Artículo <span style="color: red;" v-show="idarticulo <= 0">(* Seleccione)</span> </label>
                                     <div class="form-inline">
                                         <input type="text" class="form-control" v-model="codigo" @keyup.enter="buscarArticulo()" placeholder="Ingrese artículo">
-                                        <button class="btn btn-primary">...</button>
+                                        <button @click="abrirModal()" class="btn btn-primary">...</button>
                                         <input type="text" readonly class="form-control" v-model="articulo">
                                     </div>
                                 </div>
@@ -237,7 +237,56 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select class="form-control col-md-3" v-model="criterioA">
+                                        <option value="nombre">Nombre</option>
+                                        <option value="descripcion">Descripción</option>
+                                        <option value="codigo">Código</option>
+                                    </select>
+                                    <input type="text" v-model="buscarA" @keyup.enter="listarArticulo(buscarA,criterioA)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" @click="listarArticulo(buscarA,criterioA)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th>Opciones</th>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Stock</th>
+                                    <th>Estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="articulo in arrayArticulo" :key="articulo.id">
+                                    <td>
+                                        <button type="button" @click="agregarDetalleModal(articulo)" class="btn btn-success btn-sm">
+                                            <i class="icon-check"></i>
+                                        </button>
+                                    </td>
+                                    <td v-text="articulo.codigo"></td>
+                                    <td v-text="articulo.nombre"></td>
+                                    <td v-text="articulo.nombre_categoria"></td>
+                                    <td v-text="articulo.stock"></td>
+                                    <td>
+                                        <div v-if="articulo.condicion">
+                                            <span class="badge badge-success">Activo</span>
+                                        </div>
+                                        <div v-else>
+                                            <span class="badge badge-danger">Desactivado</span>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
@@ -288,6 +337,8 @@
                 offset : 3,
                 criterio : 'num_comprobante',
                 buscar : '',
+                buscarA : '',
+                criterioA : 'nombre',
                 arrayArticulo : [],
                 idarticulo : 0,
                 codigo : '',
@@ -431,6 +482,37 @@
 
                 }
             },
+            agregarDetalleModal(data = []) {
+                let me = this;
+                if (me.encuentra(data['id'])) {
+
+                    swal({
+                        type: 'error',
+                        title: 'Error...',
+                        text: 'Este artículo ya se encuentra agregado!',
+                    })
+                }
+                else {
+
+                    me.arrayDetalle.push({
+                        idarticulo: data['id'],
+                        articulo: data['nombre'],
+                        cantidad: 1,
+                        precio: 1,
+                    });
+                }
+            },
+            listarArticulo (buscar, criterio){
+                let me = this;
+                let url= '/articulo/listarArticulo?buscar='+ buscar + '&criterio='+ criterio;
+                axios.get(url).then(function (response) {
+                    let respuesta= response.data;
+                    me.arrayArticulo = respuesta.articulos.data;
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
 
             eliminarDetalle(index) {
                 let me = this;
@@ -516,62 +598,13 @@
                 this.listado=1;
             },
             cerrarModal(){
-                this.modal=0;
-                this.tituloModal='';
-                this.nombre='';
-                this.tipo_documento='DNI';
-                this.num_documento='';
-                this.direccion='';
-                this.telefono='';
-                this.email='';
-                this.usuario='';
-                this.password='';
-                this.idrol=0;
-                this.errorPersona=0;
+                this.modal = 0;
+                this.tituloModal = '';
             },
-            abrirModal(modelo, accion, data = []){
-                this.selectRol();
-                switch(modelo){
-                    case "persona":
-                    {
-                        switch(accion){
-                            case 'registrar':
-                            {
-                                this.modal = 1;
-                                this.tituloModal = 'Registrar Usuario';
-                                this.nombre= '';
-                                this.tipo_documento='DNI';
-                                this.num_documento='';
-                                this.direccion='';
-                                this.telefono='';
-                                this.email='';
-                                this.usuario='';
-                                this.password='';
-                                this.idrol=0;
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case 'actualizar':
-                            {
-                                //console.log(data);
-                                this.modal=1;
-                                this.tituloModal='Actualizar Usuario';
-                                this.tipoAccion=2;
-                                this.persona_id=data['id'];
-                                this.nombre = data['nombre'];
-                                this.tipo_documento = data['tipo_documento'];
-                                this.num_documento = data['num_documento'];
-                                this.direccion = data['direccion'];
-                                this.telefono = data['telefono'];
-                                this.email = data['email'];
-                                this.usuario = data['usuario'];
-                                this.password=data['password'];
-                                this.idrol=data['idrol'];
-                                break;
-                            }
-                        }
-                    }
-                }
+            abrirModal(){
+                this.arrayArticulo = [];
+                this.modal = 1;
+                this.tituloModal = 'Seleccione artículos';
             },
             desactivarUsuario(id){
                 swal({
