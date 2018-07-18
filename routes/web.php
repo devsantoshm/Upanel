@@ -69,6 +69,10 @@ Route::group(['middleware' => ['auth']], function () {
 
         // rutas de ventas
         Route::get('/venta', 'VentaController@index');
+        Route::post('/venta/registrar', 'VentaController@store');
+        Route::put('/venta/desactivar', 'VentaController@desactivar');
+        Route::get('/venta/obtenerCabecera', 'VentaController@obtenerCabecera');
+        Route::get('/venta/obtenerDetalles', 'VentaController@obtenerDetalles');
     });
 
     Route::group(['middleware' => ['Administrador']], function () {
@@ -102,6 +106,10 @@ Route::group(['middleware' => ['auth']], function () {
 
         // rutas de ventas
         Route::get('/venta', 'VentaController@index');
+        Route::post('/venta/registrar', 'VentaController@store');
+        Route::put('/venta/desactivar', 'VentaController@desactivar');
+        Route::get('/venta/obtenerCabecera', 'VentaController@obtenerCabecera');
+        Route::get('/venta/obtenerDetalles', 'VentaController@obtenerDetalles');
 
         // rutas de roles
         Route::get('/rol', 'RolController@index');
