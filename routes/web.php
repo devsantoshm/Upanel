@@ -66,6 +66,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/cliente', 'ClienteController@index');
         Route::post('/cliente/registrar', 'ClienteController@store');
         Route::put('/cliente/actualizar', 'ClienteController@update');
+
+        // rutas de ventas
+        Route::get('/venta', 'VentaController@index');
     });
 
     Route::group(['middleware' => ['Administrador']], function () {
@@ -96,6 +99,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/cliente', 'ClienteController@index');
         Route::post('/cliente/registrar', 'ClienteController@store');
         Route::put('/cliente/actualizar', 'ClienteController@update');
+
+        // rutas de ventas
+        Route::get('/venta', 'VentaController@index');
 
         // rutas de roles
         Route::get('/rol', 'RolController@index');
