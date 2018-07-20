@@ -25,7 +25,7 @@
                 </template>
 
                 <template v-if="menu === 5">
-                    <h1>ventas-component</h1>
+                    <venta-component></venta-component>
                 </template>
 
                 <template v-if="menu === 6">
@@ -59,7 +59,7 @@
             @elseif(Auth::user()->idrol === 2)
 
                 <template v-if="menu === 5">
-                    <h1>ventas-component</h1>
+                    <venta-component></venta-component>
                 </template>
 
                 <template v-if="menu === 6">
