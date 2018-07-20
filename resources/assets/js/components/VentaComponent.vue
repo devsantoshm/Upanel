@@ -92,13 +92,13 @@
                         <div class="form-group row border">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label>Proveedor(*)</label>
+                                    <label>Cliente(*)</label>
                                     <v-select
-                                            :on-search="selectProveedor"
+                                            :on-search="selectCliente"
                                             label="nombre"
                                             :options="arrayCliente"
-                                            placeholder="Buscar Proveedores..."
-                                            :onChange="getDatosProveedor"
+                                            placeholder="Buscar clientes..."
+                                            :onChange="getDatosCliente"
                                     >
 
                                     </v-select>
@@ -142,7 +142,7 @@
                             </div>
                         </div>
                         <div class="form-group row border">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Artículo <span style="color: red;" v-show="idarticulo <= 0">(* Seleccione)</span> </label>
                                     <div class="form-inline">
@@ -166,6 +166,12 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
+                                    <label>Descuento </label>
+                                    <input type="number" value="0" class="form-control" v-model="descuento">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
                                     <button @click="agregarDetalle()" class="btn btn-success form-control btnagregar"><i class="icon-plus"></i></button>
                                 </div>
                             </div>
@@ -179,6 +185,7 @@
                                         <th>Artículo</th>
                                         <th>Precio</th>
                                         <th>Cantidad</th>
+                                        <th>Descuento</th>
                                         <th>Subtotal</th>
                                     </tr>
                                     </thead>
@@ -191,31 +198,34 @@
                                         </td>
                                         <td v-text="detalle.articulo"></td>
                                         <td>
-                                            <input v-model="detalle.precio" type="number" value="3" class="form-control">
+                                            <input v-model="detalle.precio" type="number" class="form-control">
                                         </td>
                                         <td>
-                                            <input v-model="detalle.cantidad" type="number" value="2" class="form-control">
+                                            <input v-model="detalle.cantidad" type="number" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input v-model="detalle.descuento" type="number" class="form-control">
                                         </td>
                                         <td>
                                             {{ detalle.precio * detalle.cantidad }}
                                         </td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
-                                        <td colspan="4" align="right"><strong>Total Parcial:</strong></td>
+                                        <td colspan="5" align="right"><strong>Total Parcial:</strong></td>
                                         <td>$ {{totalParcial=(total - totalImpuesto).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
-                                        <td colspan="4" align="right"><strong>Total Impuesto:</strong></td>
+                                        <td colspan="5" align="right"><strong>Total Impuesto:</strong></td>
                                         <td>$ {{totalImpuesto = ((total * impuesto)/(1 + impuesto)).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
-                                        <td colspan="4" align="right"><strong>Total Neto:</strong></td>
+                                        <td colspan="5" align="right"><strong>Total Neto:</strong></td>
                                         <td>$ {{total = calcularTotal}}</td>
                                     </tr>
                                     </tbody>
                                     <tbody v-else>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             No hay artículos agregados
                                         </td>
                                     </tr>
@@ -226,7 +236,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <button type="button" @click="ocultarDetalle()" class="btn btn-secondary">Cerrar</button>
-                                <button type="button" class="btn btn-primary" @click="registrarIngreso()">Registrar Compra</button>
+                                <button type="button" class="btn btn-primary" @click="registrarVenta()">Registrar Venta</button>
                             </div>
                         </div>
                     </div>
@@ -383,7 +393,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarIngreso()">Guardar</button>
+                        <button type="button" v-if="tipoAccion === 1" class="btn btn-primary" @click="registrarVenta()">Guardar</button>
                         <button type="button" v-if="tipoAccion === 2" class="btn btn-primary" @click="actualizarPersona()">Actualizar</button>
                     </div>
                 </div>
@@ -438,6 +448,7 @@
                 articulo : '',
                 precio : 0,
                 cantidad : 0,
+                descuento : 0,
             }
         },
         components: {
@@ -494,11 +505,11 @@
                         console.log(error);
                     });
             },
-            selectProveedor(search,loading){
+            selectCliente(search, loading){
                 let me = this;
                 loading(true)
 
-                var url= '/cliente/selectProveedor?filtro='+search;
+                var url= '/cliente/selectCliente?filtro='+search;
                 axios.get(url).then(function (response) {
                     let respuesta = response.data;
                     q: search
@@ -509,7 +520,7 @@
                         console.log(error);
                     });
             },
-            getDatosProveedor(val1){
+            getDatosCliente(val1){
                 let me = this;
                 me.loading = true;
                 me.idcliente = val1.id;
@@ -622,7 +633,7 @@
                 return sw;
             },
 
-            registrarIngreso(){
+            registrarVenta(){
                 if (this.validarIngreso()){
                     return;
                 }
