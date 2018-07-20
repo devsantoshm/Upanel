@@ -509,11 +509,11 @@
                 let me = this;
                 loading(true)
 
-                var url= '/cliente/selectCliente?filtro='+search;
+                let url= '/cliente/selectCliente?filtro='+search;
                 axios.get(url).then(function (response) {
                     let respuesta = response.data;
                     q: search
-                    me.arrayCliente = respuesta.proveedores;
+                    me.arrayCliente = respuesta.clientes;
                     loading(false)
                 })
                     .catch(function (error) {
