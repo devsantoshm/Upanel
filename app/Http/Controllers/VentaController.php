@@ -84,7 +84,7 @@ class VentaController extends Controller
                 'personas.nombre',
                 'users.usuario')
             ->where('ventas.id', '=', $id)
-            ->orderBy('ingresos.id', 'desc')
+            ->orderBy('ventas.id', 'desc')
             ->take(1)
             ->get();
 
