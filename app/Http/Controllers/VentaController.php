@@ -6,6 +6,7 @@ use App\DetalleVenta;
 use App\Venta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VentaController extends Controller
 {

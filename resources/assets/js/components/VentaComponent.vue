@@ -652,13 +652,13 @@
             },
 
             registrarVenta(){
-                if (this.validarIngreso()){
+                if (this.validarVenta()){
                     return;
                 }
 
                 let me = this;
 
-                axios.post('/ingreso/registrar',{
+                axios.post('/venta/registrar',{
                     'idcliente': this.idcliente,
                     'tipo_comprobante': this.tipo_comprobante,
                     'serie_comprobante' : this.serie_comprobante,
@@ -678,13 +678,16 @@
                     me.articulo = '';
                     me.precio = 0;
                     me.cantidad = 0;
+                    me.stock = 0;
+                    me.codigo = 0;
+                    me.descuento = 0;
                     me.arrayDetalle = [];
                 }).catch(function (error) {
                     console.log(error);
                 });
             },
             actualizarPersona(){
-                if (this.validarIngreso()){
+                if (this.validarVenta()){
                     return;
                 }
 
@@ -708,17 +711,25 @@
                     console.log(error);
                 });
             },
-            validarIngreso(){
+            validarVenta(){
                 this.errorVenta = 0;
                 this.errorMostrarMsjVenta = [];
+                let me = this;
+                let art;
 
-                if ( this.idcliente === 0) this.errorMostrarMsjVenta.push("Selecciones un cliente");
-                if ( this.tipo_comprobante === 0) this.errorMostrarMsjVenta.push("Selecciones el comprobante");
-                if ( !this.num_comprobante) this.errorMostrarMsjVenta.push("Ingrese el número de comprobante");
-                if ( !this.impuesto) this.errorMostrarMsjVenta.push("Ingrese el impuesto de compra");
-                if ( this.arrayDetalle.length <= 0) this.errorMostrarMsjVenta.push("Ingrese articulos al detalle");
+                this.arrayDetalle.map( function (x) {
+                    if (x.cantidad > x.stock) {
+                        art = x.articulo + " con stock insuficiente";
+                        me.errorMostrarMsjVenta.push(art);
+                    }
+                });
+                if ( this.idcliente === 0) me.errorMostrarMsjVenta.push("Selecciones un cliente");
+                if ( this.tipo_comprobante === 0) me.errorMostrarMsjVenta.push("Selecciones el comprobante");
+                if ( !this.num_comprobante) me.errorMostrarMsjVenta.push("Ingrese el número de comprobante");
+                if ( !this.impuesto) me.errorMostrarMsjVenta.push("Ingrese el impuesto de compra");
+                if ( this.arrayDetalle.length <= 0) me.errorMostrarMsjVenta.push("Ingrese articulos al detalle");
 
-                if (this.errorMostrarMsjVenta.length) this.errorVenta = 1;
+                if (this.errorMostrarMsjVenta.length) me.errorVenta = 1;
 
                 return this.errorVenta;
             },
