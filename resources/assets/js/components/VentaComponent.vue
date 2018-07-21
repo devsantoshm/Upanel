@@ -12,6 +12,10 @@
                     <button type="button" @click="mostrarDetalle()" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
+
+                    <button type="button" @click="cargarPdf()" class="btn btn-secondary">
+                        <i class="icon-doc"></i>&nbsp;Reporte
+                    </button>
                 </div>
                 <!-- Listado-->
                 <template v-if="listado === 1">
@@ -637,6 +641,10 @@
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+
+            cargarPdf() {
+                window.open('http://localhost:8000/venta/listarPdf', '_blank')
             },
 
             eliminarDetalle(index) {
