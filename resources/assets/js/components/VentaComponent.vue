@@ -316,6 +316,7 @@
                                     <tbody v-else>
                                     <tr>
                                         <td colspan="5">
+                                        <td colspan="5">
                                             No hay artículos agregados
                                         </td>
                                     </tr>
@@ -799,7 +800,7 @@
             },
             desactivarVenta(id){
                 swal({
-                    title: 'Esta seguro de anular este ingreso?',
+                    title: 'Esta seguro de anular esta venta?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -814,13 +815,13 @@
                     if (result.value) {
                         let me = this;
 
-                        axios.put('/ingreso/desactivar',{
+                        axios.put('/venta/desactivar',{
                             'id': id
                         }).then(function (response) {
                             me.listarVenta(1,'','num_comprobante');
                             swal(
-                                'Desactivado!',
-                                'El ingreso ha sido anulado con éxito.',
+                                'Anulado!',
+                                'La venta ha sido anulado con éxito.',
                                 'success'
                             )
                         }).catch(function (error) {
