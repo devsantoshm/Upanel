@@ -201,13 +201,15 @@
                                             <input v-model="detalle.precio" type="number" class="form-control">
                                         </td>
                                         <td>
+                                            <span style="color: red;" v-show="detalle.cantidad > detalle.stock"> Stock: {{ detalle.stock }} </span>
                                             <input v-model="detalle.cantidad" type="number" class="form-control">
                                         </td>
                                         <td>
+                                            <span style="color: red;" v-show="detalle.descuento > (detalle.precio * detalle.cantidad)"> Descuento superior </span>
                                             <input v-model="detalle.descuento" type="number" class="form-control">
                                         </td>
                                         <td>
-                                            {{ detalle.precio * detalle.cantidad }}
+                                            {{ detalle.precio * detalle.cantidad - detalle.descuento}}
                                         </td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
@@ -488,7 +490,7 @@
                 let resultado = 0.0;
 
                 for(let i=0; i<this.arrayDetalle.length; i++){
-                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad)
+                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad - this.arrayDetalle[i].descuento)
                 }
                 return resultado;
             }
@@ -572,19 +574,30 @@
                             text: 'Este artículo ya se encuentra agregado!',
                         })
                     } else {
-                        
-                        me.arrayDetalle.push({
-                            idarticulo: me.idarticulo,
-                            articulo: me.articulo,
-                            cantidad: me.cantidad,
-                            precio: me.precio,
-                        });
-                        me.codigo = "";
-                        me.idarticulo = 0;
-                        me.cantidad = 0;
-                        me.precio = 0;
-                        me.articulo = "";
-                        
+                        if (me.cantidad > me.stock) {
+                            swal({
+                                type: 'error',
+                                title: 'Error...',
+                                text: 'No hay stock disponible!',
+                            })
+                        } else {
+                            me.arrayDetalle.push({
+                                idarticulo: me.idarticulo,
+                                articulo: me.articulo,
+                                cantidad: me.cantidad,
+                                precio: me.precio,
+                                descuento: me.descuento,
+                                stock: me.stock,
+                            });
+                            me.codigo = "";
+                            me.idarticulo = 0;
+                            me.cantidad = 0;
+                            me.precio = 0;
+                            me.articulo = "";
+                            me.descuento = 0;
+                            me.stock = 0;
+
+                        }
                     }
 
                 }
@@ -605,7 +618,9 @@
                         idarticulo: data['id'],
                         articulo: data['nombre'],
                         cantidad: 1,
-                        precio: 1,
+                        precio: data['precio_venta'],
+                        descuento: 0,
+                        stock: data['stock'],
                     });
                 }
             },
