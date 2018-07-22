@@ -62,6 +62,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/ingreso/desactivar', 'IngresoController@desactivar');
         Route::get('/ingreso/obtenerCabecera', 'IngresoController@obtenerCabecera');
         Route::get('/ingreso/obtenerDetalles', 'IngresoController@obtenerDetalles');
+        Route::get('/ingreso/listarPdf', 'IngresoController@listarPdf');
 
     });
 
@@ -149,5 +150,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/ingreso/desactivar', 'IngresoController@desactivar');
         Route::get('/ingreso/obtenerCabecera', 'IngresoController@obtenerCabecera');
         Route::get('/ingreso/obtenerDetalles', 'IngresoController@obtenerDetalles');
+        Route::get('/ingreso/listarPdf', 'IngresoController@listarPdf');
+
     });
 });
