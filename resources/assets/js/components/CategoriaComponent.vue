@@ -12,6 +12,9 @@
                     <button type="button" @click="abrirModal('categoria','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
+                    <button type="button" @click="cargarPdf()" class="btn btn-secondary">
+                        <i class="icon-doc"></i>&nbsp;Reporte
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
@@ -200,6 +203,11 @@
                         console.log(error);
                     });
             },
+
+            cargarPdf() {
+                window.open('http://localhost:8000/categoria/listarPdf', '_blank')
+            },
+
             cambiarPagina(page, buscar, criterio){
                 let me = this;
                 //Actualiza la página actual

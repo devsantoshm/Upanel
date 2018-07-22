@@ -35,6 +35,22 @@ class CategoriesController extends Controller
         ];
     }
 
+    public function listarPdf () {
+
+        $categorias = Categoria::orderBy('id', 'desc')
+            ->get();
+
+        $cont = Categoria::count();
+
+        $pdf = \PDF::loadView('pdf.categoriaspdf', [
+            'categorias' => $categorias,
+            'cont' => $cont,
+        ]);
+
+        return $pdf->download('categorias.pdf');
+    }
+
+
     public function selectCategoria(Request $request) {
         if (!$request->ajax()) return redirect('/');
         $categorias = Categoria::where('condicion','=','1')

@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/categoria/actualizar', 'CategoriesController@update');
         Route::put('/categoria/desactivar', 'CategoriesController@desactivar');
         Route::put('/categoria/activar', 'CategoriesController@activar');
+        Route::get('/categoria/listarPdf', 'CategoriesController@listarPdf');
+
 
         // rutas de articulos
         Route::get('/articulo', 'ArticuloController@index');
@@ -93,6 +95,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/categoria/actualizar', 'CategoriesController@update');
         Route::put('/categoria/desactivar', 'CategoriesController@desactivar');
         Route::put('/categoria/activar', 'CategoriesController@activar');
+        Route::get('/categoria/listarPdf', 'CategoriesController@listarPdf');
 
         // rutas de articulos
         Route::get('/articulo', 'ArticuloController@index');
