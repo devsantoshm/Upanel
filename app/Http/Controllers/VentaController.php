@@ -142,13 +142,74 @@ class VentaController extends Controller
         ];
     }
 
+    public function pdf(Request $request, $id) {
+
+        $venta = Venta::join(
+            'personas',
+            'ventas.idcliente',
+            '=',
+            'personas.id'
+        )
+            ->join(
+                'users',
+                'ventas.idusuario',
+                '=',
+                'users.id'
+            )
+            ->select(
+                'ventas.id',
+                'ventas.tipo_comprobante',
+                'ventas.serie_comprobante',
+                'ventas.num_comprobante',
+                'ventas.created_at',
+                'ventas.impuesto',
+                'ventas.total',
+                'ventas.estado',
+                'personas.nombre',
+                'personas.tipo_documento',
+                'personas.num_documento',
+                'personas.direccion',
+                'personas.email',
+                'personas.telefono',
+                'users.usuario'
+            )
+            ->where(
+                'ventas.id',
+                '=',
+                $id
+            )
+            ->orderBy('ventas.id', 'desc')
+            ->take('1')
+            ->get();
+
+        $detalles = DetalleVenta::join('articulos', 'detalle_ventas.idarticulo', '=', 'articulos.id')
+            ->select(
+                'detalle_ventas.cantidad',
+                'detalle_ventas.precio',
+                'detalle_ventas.descuento',
+                'articulos.nombre as articulo'
+            )
+            ->where('detalle_ventas.idventa', '=', $id)
+            ->orderBy('detalle_ventas.id', 'desc')
+            ->get();
+
+        $numVenta = Venta::select('num_comprobante')->where('id', $id)->get();
+
+        $pdf = \PDF::loadView('pdf.venta', [
+            'venta' => $venta,
+            'detalles' => $detalles,
+        ]);
+
+        return $pdf->download('venta-'.$numVenta[0]->num_comprobante.'.pdf');
+    }
+
     public function store(Request $request) {
         if (!$request->ajax()) return redirect('/');
 
         try{
             DB::beginTransaction();
 
-            $mytime= Carbon::now('America/Bogota');
+            $mytime= Carbon::now();
 
             $venta = new Venta();
             $venta->idcliente = $request->idcliente;
@@ -176,6 +237,9 @@ class VentaController extends Controller
             }
 
             DB::commit();
+            return [
+                'id' => $venta->id
+            ];
         } catch (Exception $e){
             DB::rollBack();
         }

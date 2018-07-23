@@ -54,6 +54,9 @@
                                     <td>
                                         <button type="button" @click="verVenta(venta.id)" class="btn btn-success btn-sm">
                                             <i class="icon-eye"></i>
+                                        </button>
+                                        &nbsp;<button type="button" @click="pdfVenta(venta.id)" class="btn btn-info btn-sm">
+                                            <i class="icon-doc"></i>
                                         </button> &nbsp;
                                         <template v-if="venta.estado === 'Registrado'">
                                             <button type="button" class="btn btn-danger btn-sm" @click="desactivarVenta(venta.id)">
@@ -647,6 +650,10 @@
                 window.open('http://localhost:8000/venta/listarPdf', '_blank')
             },
 
+            pdfVenta(id) {
+                window.open('http://localhost:8000/venta/pdf/' + id , '_blank')
+            },
+
             eliminarDetalle(index) {
                 let me = this;
                 me.arrayDetalle.splice(index, 1);
@@ -693,6 +700,7 @@
                     me.codigo = 0;
                     me.descuento = 0;
                     me.arrayDetalle = [];
+                    window.open('http://localhost:8000/venta/pdf/' + response.data.id , '_blank')
                 }).catch(function (error) {
                     console.log(error);
                 });

@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/venta/obtenerCabecera', 'VentaController@obtenerCabecera');
         Route::get('/venta/obtenerDetalles', 'VentaController@obtenerDetalles');
         Route::get('/venta/listarPdf', 'VentaController@listarPdf');
+        Route::get('/venta/pdf/{id}', 'VentaController@pdf')->name('venta_pdf');
 
 
         // rutas de articulo
@@ -132,6 +133,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/venta/obtenerCabecera', 'VentaController@obtenerCabecera');
         Route::get('/venta/obtenerDetalles', 'VentaController@obtenerDetalles');
         Route::get('/venta/listarPdf', 'VentaController@listarPdf');
+        Route::get('/venta/pdf/{id}', 'VentaController@pdf')->name('venta_pdf');
 
         // rutas de roles
         Route::get('/rol', 'RolController@index');
