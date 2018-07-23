@@ -25,7 +25,7 @@ class IngresoController extends Controller
                     'ingresos.tipo_comprobante',
                     'ingresos.serie_comprobante',
                     'ingresos.num_comprobante',
-                    'ingresos.fecha_hora',
+                    'ingresos.created_at',
                     'ingresos.impuesto',
                     'ingresos.total',
                     'ingresos.estado',
@@ -42,7 +42,7 @@ class IngresoController extends Controller
                     'ingresos.tipo_comprobante',
                     'ingresos.serie_comprobante',
                     'ingresos.num_comprobante',
-                    'ingresos.fecha_hora',
+                    'ingresos.created_at',
                     'ingresos.impuesto',
                     'ingresos.total',
                     'ingresos.estado',
@@ -75,7 +75,7 @@ class IngresoController extends Controller
                 'ingresos.tipo_comprobante',
                 'ingresos.serie_comprobante',
                 'ingresos.num_comprobante',
-                'ingresos.fecha_hora',
+                'ingresos.created_at',
                 'ingresos.impuesto',
                 'ingresos.total',
                 'ingresos.estado',
@@ -107,7 +107,7 @@ class IngresoController extends Controller
                 'ingresos.tipo_comprobante',
                 'ingresos.serie_comprobante',
                 'ingresos.num_comprobante',
-                'ingresos.fecha_hora',
+                'ingresos.created_at',
                 'ingresos.impuesto',
                 'ingresos.total',
                 'ingresos.estado',
@@ -149,15 +149,12 @@ class IngresoController extends Controller
         try{
             DB::beginTransaction();
 
-            $mytime= Carbon::now('America/Bogota');
-
             $ingreso = new Ingreso();
             $ingreso->idproveedor = $request->idproveedor;
             $ingreso->idusuario = \Auth::user()->id;
             $ingreso->tipo_comprobante = $request->tipo_comprobante;
             $ingreso->serie_comprobante = $request->serie_comprobante;
             $ingreso->num_comprobante = $request->num_comprobante;
-            $ingreso->fecha_hora = $mytime->toDateString();
             $ingreso->impuesto = $request->impuesto;
             $ingreso->total = $request->total;
             $ingreso->estado = 'Registrado';

@@ -25,7 +25,7 @@
                                     <select class="form-control col-md-3" v-model="criterio">
                                         <option value="tipo_comprobante">Tipo Comprobante</option>
                                         <option value="num_comprobante">Número Comprobante</option>
-                                        <option value="fecha_hora">Fecha-Hora</option>
+                                        <option value="created_at">Fecha-Hora</option>
                                     </select>
                                     <input type="text" v-model="buscar" @keyup.enter="listarIngreso(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                     <button type="submit" @click="listarIngreso(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -54,7 +54,7 @@
                                         <button type="button" @click="verIngreso(ingreso.id)" class="btn btn-success btn-sm">
                                             <i class="icon-eye"></i>
                                         </button> &nbsp;
-                                        <template v-if="ingreso.estado=='Registrado'">
+                                        <template v-if="ingreso.estado === 'Registrado'">
                                             <button type="button" class="btn btn-danger btn-sm" @click="desactivarIngreso(ingreso.id)">
                                                 <i class="icon-trash"></i>
                                             </button>
@@ -65,7 +65,7 @@
                                     <td v-text="ingreso.tipo_comprobante"></td>
                                     <td v-text="ingreso.serie_comprobante"></td>
                                     <td v-text="ingreso.num_comprobante"></td>
-                                    <td v-text="ingreso.fecha_hora"></td>
+                                    <td v-text="ingreso.created_at"></td>
                                     <td v-text="ingreso.total"></td>
                                     <td v-text="ingreso.impuesto"></td>
                                     <td v-text="ingreso.estado"></td>
@@ -205,15 +205,15 @@
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="4" align="right"><strong>Total Parcial:</strong></td>
-                                        <td>$ {{totalParcial=(total - totalImpuesto).toFixed(2)}}</td>
+                                        <td>$ {{totalParcial = (calcularTotalParcial).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="4" align="right"><strong>Total Impuesto:</strong></td>
-                                        <td>$ {{totalImpuesto = ((total * impuesto)/(1 + impuesto)).toFixed(2)}}</td>
+                                        <td>$ {{totalImpuesto = (calcularTotalImpuesto).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="4" align="right"><strong>Total Neto:</strong></td>
-                                        <td>$ {{total = calcularTotal}}</td>
+                                        <td>$ {{total = (calcularTotal).toFixed(2)}}</td>
                                     </tr>
                                     </tbody>
                                     <tbody v-else>
@@ -410,7 +410,7 @@
                 tipo_comprobante : 'BOLETA',
                 serie_comprobante : '',
                 num_comprobante : '',
-                impuesto: 0.18,
+                impuesto: 19,
                 total:0.0,
                 totalImpuesto:0.0,
                 totalParcial:0.0,
@@ -479,11 +479,29 @@
             calcularTotal: function(){
                 let resultado = 0.0;
 
+                for(let i=0; i<this.arrayDetalle.length; i++) {
+                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.impuesto / 100))
+                }
+                return resultado;
+            },
+
+            calcularTotalImpuesto: function(){
+                let resultado = 0.0;
+
+                for(let i=0; i<this.arrayDetalle.length; i++){
+                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.impuesto / 100))
+                }
+                return resultado;
+            },
+
+            calcularTotalParcial: function(){
+                let resultado = 0.0;
+
                 for(let i=0; i<this.arrayDetalle.length; i++){
                     resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad)
                 }
                 return resultado;
-            }
+            },
         },
         methods : {
             listarIngreso (page,buscar,criterio){
@@ -651,7 +669,7 @@
                     me.tipo_comprobante = 'BOLETA';
                     me.serie_comprobante = '';
                     me.num_comprobante = '';
-                    me.impuesto = 0.18;
+                    me.impuesto = 19;
                     me.idarticulo = 0;
                     me.articulo = '';
                     me.precio = 0;
@@ -707,7 +725,7 @@
                 me.tipo_comprobante = 'BOLETA';
                 me.serie_comprobante = '';
                 me.num_comprobante = '';
-                me.impuesto = 0.18;
+                me.impuesto = 19;
                 me.idarticulo = 0;
                 me.articulo = '';
                 me.precio = 0;
