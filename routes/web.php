@@ -23,6 +23,8 @@ Route::group(['middleware' => ['guest']], function () {
 // Usuarios auntentificados
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::get('/dashboard', 'DashboardController');
+
     Route::get('/main', function () {
         return view('contenido.contenido');
     })->name('main');

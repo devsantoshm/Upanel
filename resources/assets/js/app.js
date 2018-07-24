@@ -6,6 +6,7 @@
  */
 
 require('./bootstrap');
+require('chart.js');
 
 window.Vue = require('vue');
 
@@ -23,6 +24,7 @@ Vue.component('rol-component', require('./components/RolComponent'));
 Vue.component('user-component', require('./components/UserComponent'));
 Vue.component('ingreso-component', require('./components/IngresoComponent'));
 Vue.component('venta-component', require('./components/VentaComponent'));
+Vue.component('dash-component', require('./components/DashboardComponent'));
 
 const app = new Vue({
     el: '#app',
