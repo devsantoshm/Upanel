@@ -45,7 +45,7 @@
                 </template>
 
                 <template v-if="menu === 10">
-                    <h1>ReportVentas-component</h1>
+                    <reportventas-component></reportventas-component>
                 </template>
 
                 <template v-if="menu === 11">
@@ -67,7 +67,7 @@
                 </template>
 
                 <template v-if="menu === 10">
-                    <h1>ReportVentas-component</h1>
+                    <reportventas-component></reportventas-component>
                 </template>
 
                 <template v-if="menu === 11">
