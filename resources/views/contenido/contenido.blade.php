@@ -5,7 +5,7 @@
             @if(Auth::user()->idrol === 1)
 
                 <template v-if="menu === 0">
-                    <dash-component></dash-component>
+                    <h1>escritorio-component</h1>
                 </template>
 
                 <template v-if="menu === 1">
@@ -41,7 +41,7 @@
                 </template>
 
                 <template v-if="menu === 9">
-                    <h1>ReportIngresos-component</h1>
+                    <reportingresos-component></reportingresos-component>
                 </template>
 
                 <template v-if="menu === 10">
@@ -57,10 +57,6 @@
                 </template>
 
             @elseif(Auth::user()->idrol === 2)
-
-                <template v-if="menu === 0">
-                    <dash-component></dash-component>
-                </template>
 
                 <template v-if="menu === 5">
                     <venta-component></venta-component>
@@ -84,10 +80,6 @@
 
             @elseif(Auth::user()->idrol === 3)
 
-                <template v-if="menu === 0">
-                    <dash-component></dash-component>
-                </template>
-
                 <template v-if="menu === 1">
                     <categoria-component></categoria-component>
                 </template>
@@ -105,7 +97,7 @@
                 </template>
 
                 <template v-if="menu === 9">
-                    <h1>ReportIngresos-component</h1>
+                    <reportingresos-component></reportingresos-component>
                 </template>
 
                 <template v-if="menu === 11">
