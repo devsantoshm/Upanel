@@ -22,8 +22,20 @@ class DashboardController extends Controller
             ))
         ->get();
 
+        $ventas = DB::table('ventas as v')->select(
+            DB::raw('MONTH(v.created_at) as mes'),
+            DB::raw('YEAR(v.created_at) as anio'),
+            DB::raw('SUM(v.total) as total')
+        )
+        ->whereYear('v.created_at', $anio)
+        ->groupBy(DB::raw('MONTH(v.created_at)'),
+            DB::raw('YEAR(v.created_at)'
+            ))
+        ->get();
+
         return [
             'ingresos' => $ingresos,
+            'ventas' => $ventas,
             'anio' => $anio,
         ];
     }

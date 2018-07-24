@@ -55,14 +55,25 @@
     export default {
         data () {
             return {
+
+                // ingresos
                 varIngreso: null,
                 charIngreso: null,
                 ingresos: [],
                 varTotalIngreso: [],
                 varMesIngreso: [],
+
+                //ventas
+                varVentas: null,
+                charVentas: null,
+                ventas: [],
+                varTotalVenta: [],
+                varMesVenta: [],
             }
         },
         methods: {
+
+            // ingresos
             getIngresos () {
                 let me = this;
                 let url = '/dashboard';
@@ -106,9 +117,56 @@
                     }
                 });
             },
+
+            //ventas
+            getVentas () {
+                let me = this;
+                let url = '/dashboard';
+                axios.get(url).then(function (response) {
+                    let respuesta = response.data;
+                    me.ventas = respuesta.ventas;
+                    // cargamos los datos de chartjs
+                    me.loadventas();
+                })
+            },
+
+
+            loadventas () {
+                let me = this;
+                me.ventas.map(function (x) {
+                    me.varMesVenta.push(x.mes);
+                    me.varTotalVenta.push(x.total);
+                });
+                me.varVenta = document.getElementById('ventas').getContext('2d');
+
+                me.charVenta = new Chart(me.varVenta, {
+
+                    type: 'bar',
+                    data: {
+                        labels: me.varMesVenta,
+                        datasets: [{
+                            label: 'Ventas',
+                            data: me.varTotalVenta,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 0.2)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+            },
         },
         mounted () {
             this.getIngresos();
+            this.getVentas();
         }
     }
 </script>
