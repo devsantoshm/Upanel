@@ -711,8 +711,8 @@
                 if ( this.idproveedor === 0) this.errorMostrarMsjIngreso.push("Selecciones un proveedor");
                 if ( this.tipo_comprobante === 0) this.errorMostrarMsjIngreso.push("Selecciones el comprobante");
                 if ( !this.num_comprobante) this.errorMostrarMsjIngreso.push("Ingrese el número de comprobante");
-                if ( this.impuesto > 100) me.errorMostrarMsjVenta.push("El impuesto no debe ser mayor al 100%");
-                if ( this.impuesto < 0) me.errorMostrarMsjVenta.push("El impuesto no debe ser menor al 0%");
+                if ( this.impuesto > 100) this.errorMostrarMsjVenta.push("El impuesto no debe ser mayor al 100%");
+                if ( this.impuesto < 0) this.errorMostrarMsjVenta.push("El impuesto no debe ser menor al 0%");
                 if ( this.arrayDetalle.length <= 0) this.errorMostrarMsjIngreso.push("Ingrese articulos al detalle");
 
                 if (this.errorMostrarMsjIngreso.length) this.errorIngreso = 1;
