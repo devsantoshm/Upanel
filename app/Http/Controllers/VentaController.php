@@ -24,7 +24,7 @@ class VentaController extends Controller
                     'ventas.tipo_comprobante',
                     'ventas.serie_comprobante',
                     'ventas.num_comprobante',
-                    'ventas.fecha_hora',
+                    'ventas.created_at',
                     'ventas.impuesto',
                     'ventas.total',
                     'ventas.estado',
@@ -41,7 +41,7 @@ class VentaController extends Controller
                     'ventas.tipo_comprobante',
                     'ventas.serie_comprobante',
                     'ventas.num_comprobante',
-                    'ventas.fecha_hora',
+                    'ventas.created_at',
                     'ventas.impuesto',
                     'ventas.total',
                     'ventas.estado',
@@ -77,7 +77,7 @@ class VentaController extends Controller
                 'ventas.tipo_comprobante',
                 'ventas.serie_comprobante',
                 'ventas.num_comprobante',
-                'ventas.fecha_hora',
+                'ventas.created_at',
                 'ventas.impuesto',
                 'ventas.total',
                 'ventas.estado',
@@ -102,7 +102,7 @@ class VentaController extends Controller
                 'ventas.tipo_comprobante',
                 'ventas.serie_comprobante',
                 'ventas.num_comprobante',
-                'ventas.fecha_hora',
+                'ventas.created_at',
                 'ventas.impuesto',
                 'ventas.total',
                 'ventas.estado',
@@ -209,15 +209,12 @@ class VentaController extends Controller
         try{
             DB::beginTransaction();
 
-            $mytime= Carbon::now();
-
             $venta = new Venta();
             $venta->idcliente = $request->idcliente;
             $venta->idusuario = \Auth::user()->id;
             $venta->tipo_comprobante = $request->tipo_comprobante;
             $venta->serie_comprobante = $request->serie_comprobante;
             $venta->num_comprobante = $request->num_comprobante;
-            $venta->fecha_hora = $mytime->toDateString();
             $venta->impuesto = $request->impuesto;
             $venta->total = $request->total;
             $venta->estado = 'Registrado';

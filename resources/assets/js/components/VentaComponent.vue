@@ -26,7 +26,7 @@
                                     <select class="form-control col-md-3" v-model="criterio">
                                         <option value="tipo_comprobante">Tipo Comprobante</option>
                                         <option value="num_comprobante">Número Comprobante</option>
-                                        <option value="fecha_hora">Fecha-Hora</option>
+                                        <option value="created_at">Fecha-Hora</option>
                                     </select>
                                     <input type="text" v-model="buscar" @keyup.enter="listarVenta(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                     <button type="submit" @click="listarVenta(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -69,7 +69,7 @@
                                     <td v-text="venta.tipo_comprobante"></td>
                                     <td v-text="venta.serie_comprobante"></td>
                                     <td v-text="venta.num_comprobante"></td>
-                                    <td v-text="venta.fecha_hora"></td>
+                                    <td v-text="venta.created_at"></td>
                                     <td v-text="venta.total"></td>
                                     <td v-text="venta.impuesto"></td>
                                     <td v-text="venta.estado"></td>
@@ -212,20 +212,21 @@
                                             <input v-model="detalle.cantidad" type="number" class="form-control">
                                         </td>
                                         <td>
-                                            <span style="color: red;" v-show="detalle.descuento > (detalle.precio * detalle.cantidad)"> Descuento superior </span>
+                                            <span style="color: red;" v-show="detalle.descuento > 100"> Descuento superior del 100% </span>
+                                            <span style="color: red;" v-show="detalle.descuento < 0"> Descuento inferior del 0% </span>
                                             <input v-model="detalle.descuento" type="number" class="form-control">
                                         </td>
                                         <td>
-                                            {{ detalle.precio * detalle.cantidad - detalle.descuento}}
+                                            {{ detalle.precio * detalle.cantidad - (detalle.precio * detalle.cantidad * (detalle.descuento / 100)) }}
                                         </td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="5" align="right"><strong>Total Parcial:</strong></td>
-                                        <td>$ {{totalParcial=(total - totalImpuesto).toFixed(2)}}</td>
+                                        <td>$ {{totalParcial=(calcularTotalParcial).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="5" align="right"><strong>Total Impuesto:</strong></td>
-                                        <td>$ {{totalImpuesto = ((total * impuesto)/(1 + impuesto)).toFixed(2)}}</td>
+                                        <td>$ {{totalImpuesto = (calcularTotalImpuesto).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="5" align="right"><strong>Total Neto:</strong></td>
@@ -304,16 +305,16 @@
                                         <td v-text="detalle.cantidad"></td>
                                         <td v-text="detalle.descuento"></td>
                                         <td>
-                                            {{ detalle.precio * detalle.cantidad - detalle.descuento}}
+                                            {{ detalle.precio * detalle.cantidad - (detalle.precio * detalle.cantidad * (detalle.descuento / 100)) }}
                                         </td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="4" align="right"><strong>Total Parcial:</strong></td>
-                                        <td>$ {{ totalParcial=(total - totalImpuesto).toFixed(2)}}</td>
+                                        <td>$ {{ totalParcial=(calcularTotalParcial).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="4" align="right"><strong>Total Impuesto:</strong></td>
-                                        <td>$ {{ totalImpuesto = ((total * impuesto)).toFixed(2)}}</td>
+                                        <td>$ {{ totalImpuesto = (calcularTotalImpuesto).toFixed(2)}}</td>
                                     </tr>
                                     <tr style="background-color: #CEECF5;">
                                         <td colspan="4" align="right"><strong>Total Neto:</strong></td>
@@ -428,7 +429,7 @@
                 tipo_comprobante : 'BOLETA',
                 serie_comprobante : '',
                 num_comprobante : '',
-                impuesto: 0.18,
+                impuesto: 19,
                 total:0.0,
                 totalImpuesto:0.0,
                 totalParcial:0.0,
@@ -500,10 +501,28 @@
                 let resultado = 0.0;
 
                 for(let i=0; i<this.arrayDetalle.length; i++){
-                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad - this.arrayDetalle[i].descuento)
+                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad - (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.arrayDetalle[i].descuento / 100)))
                 }
                 return resultado;
-            }
+            },
+
+            calcularTotalImpuesto: function(){
+                let resultado = 0.0;
+
+                for(let i=0; i<this.arrayDetalle.length; i++){
+                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) * (this.impuesto / 100)
+                }
+                return resultado;
+            },
+
+            calcularTotalParcial: function(){
+                let resultado = 0.0;
+
+                for(let i=0; i<this.arrayDetalle.length; i++) {
+                    resultado = this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad - (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.arrayDetalle[i].descuento / 100))
+                }
+                return resultado;
+            },
         },
         methods : {
             listarVenta (page, buscar, criterio){
@@ -691,7 +710,7 @@
                     me.tipo_comprobante = 'BOLETA';
                     me.serie_comprobante = '';
                     me.num_comprobante = '';
-                    me.impuesto = 0.18;
+                    me.impuesto = 19;
                     me.idarticulo = 0;
                     me.articulo = '';
                     me.precio = 0;
@@ -745,7 +764,8 @@
                 if ( this.idcliente === 0) me.errorMostrarMsjVenta.push("Selecciones un cliente");
                 if ( this.tipo_comprobante === 0) me.errorMostrarMsjVenta.push("Selecciones el comprobante");
                 if ( !this.num_comprobante) me.errorMostrarMsjVenta.push("Ingrese el número de comprobante");
-                if ( !this.impuesto) me.errorMostrarMsjVenta.push("Ingrese el impuesto de compra");
+                if ( this.impuesto > 100) me.errorMostrarMsjVenta.push("El impuesto no debe ser mayor al 100%");
+                if ( this.impuesto < 0) me.errorMostrarMsjVenta.push("El impuesto no debe ser menor al 0%");
                 if ( this.arrayDetalle.length <= 0) me.errorMostrarMsjVenta.push("Ingrese articulos al detalle");
 
                 if (this.errorMostrarMsjVenta.length) me.errorVenta = 1;
@@ -759,7 +779,7 @@
                 me.tipo_comprobante = 'BOLETA';
                 me.serie_comprobante = '';
                 me.num_comprobante = '';
-                me.impuesto = 0.18;
+                me.impuesto = 19;
                 me.idarticulo = 0;
                 me.articulo = '';
                 me.precio = 0;
