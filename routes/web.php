@@ -24,6 +24,7 @@ Route::group(['middleware' => ['guest']], function () {
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/dashboard', 'DashboardController');
+    Route::post('/notification/get', 'NotificationController@get');
 
     Route::get('/main', function () {
         return view('contenido.contenido');
