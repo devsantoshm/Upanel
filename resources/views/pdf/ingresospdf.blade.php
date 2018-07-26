@@ -106,7 +106,7 @@
                 <td>{{$a->tipo_comprobante}}</td>
                 <td>{{$a->serie_comprobante}}</td>
                 <td>{{$a->num_comprobante}}</td>
-                <td>{{$a->fecha_hora}}</td>
+                <td>{{$a->created_at}}</td>
                 <td>{{$a->impuesto}}</td>
                 <td>{{$a->total}}</td>
                 <td>{{$a->nombre}}</td>

@@ -480,7 +480,7 @@
                 let resultado = 0.0;
 
                 for(let i=0; i<this.arrayDetalle.length; i++) {
-                    resultado = resultado + ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) - ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) * (this.impuesto / 100))) + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.impuesto / 100))
+                    resultado += ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) - ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) * (this.impuesto / 100))) + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.impuesto / 100))
                 }
                 return resultado;
             },
@@ -489,7 +489,7 @@
                 let resultado = 0.0;
 
                 for(let i=0; i<this.arrayDetalle.length; i++){
-                    resultado = resultado + (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.impuesto / 100))
+                    resultado += (this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad * (this.impuesto / 100))
                 }
                 return resultado;
             },
@@ -498,7 +498,7 @@
                 let resultado = 0.0;
 
                 for(let i=0; i<this.arrayDetalle.length; i++){
-                    resultado = resultado + ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) - ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) * (this.impuesto / 100)))
+                    resultado += ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) - ((this.arrayDetalle[i].precio * this.arrayDetalle[i].cantidad) * (this.impuesto / 100)))
                 }
                 return resultado;
             },

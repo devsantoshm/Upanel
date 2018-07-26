@@ -187,9 +187,9 @@
                     <tr>
                         <td>{{ $det->cantidad }}</td>
                         <td>{{ $det->articulo }}</td>
-                        <td>{{ $det->precio }}</td>
-                        <td>{{ $det->descuento }}</td>
-                        <td>{{ $det->cantidad *  $det->precio - ($det->cantidad *  $det->precio * ($det->descuento / 100 )) }}</td>
+                        <td>$ {{ $det->precio }}</td>
+                        <td>{{ $det->descuento }} %</td>
+                        <td>$ {{ $det->cantidad *  $det->precio - ($det->cantidad *  $det->precio * ($det->descuento / 100 )) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -200,14 +200,14 @@
                         <th></th>
                         <th></th>
                         <th>SUBTOTAL</th>
-                        <td>{{round($v->total * $v->impuesto, 2)}}</td>
+                        <td>$ {{round(($v->total - (($v->total * ($v->impuesto / 100)))), 2)}}</td>
                     </tr>
                     <tr>
                         <th></th>
                         <th></th>
                         <th></th>
                         <th>Impuesto</th>
-                        <td>$ {{round($v->total * $v->impuesto, 2)}}</td>
+                        <td>$ {{round($v->total * ($v->impuesto / 100), 2)}}</td>
                     </tr>
                     <tr>
                         <th></th>
