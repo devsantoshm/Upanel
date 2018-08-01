@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\Persona;
-use App\Proveedor;
+use Upanel\Persona;
+use Upanel\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

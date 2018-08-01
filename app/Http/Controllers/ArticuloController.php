@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\Articulo;
+use Upanel\Articulo;
 use Illuminate\Http\Request;
 
 class ArticuloController extends Controller

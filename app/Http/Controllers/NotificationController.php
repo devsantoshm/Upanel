@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\Notification;
+use Upanel\Notification;
 use Illuminate\Http\Request;
 use Auth;
 

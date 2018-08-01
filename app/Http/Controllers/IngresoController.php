@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\DetalleIngreso;
-use App\Ingreso;
-use App\Notifications\NotifyAdmin;
-use App\User;
+use Upanel\DetalleIngreso;
+use Upanel\Ingreso;
+use Upanel\Notifications\NotifyAdmin;
+use Upanel\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

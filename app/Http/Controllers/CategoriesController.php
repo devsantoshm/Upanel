@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\Categoria;
+use Upanel\Categoria;
 use Illuminate\Http\Request;
 use function PHPSTORM_META\elementType;
 

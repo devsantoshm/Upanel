@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\Persona;
+use Upanel\Persona;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller

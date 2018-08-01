@@ -10,6 +10,6 @@ se creara un usuario por defecto que sera de rol administrador cuyo acceso es
 User: administrador
 Clave: secret
 
-Las migraciones incluyen los triggers para las ventas que permite actualizar el stock de los items}
+Las migraciones incluyen los triggers para las ventas que permite actualizar el stock de los items
 
 Se requiere tener cuenta en pusher y meter tus credenciales para las notificaciones en tiempo real

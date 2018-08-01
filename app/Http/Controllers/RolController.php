@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\Rol;
+use Upanel\Rol;
 use Illuminate\Http\Request;
 
 class RolController extends Controller

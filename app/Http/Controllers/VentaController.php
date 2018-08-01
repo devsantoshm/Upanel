@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Upanel\Http\Controllers;
 
-use App\DetalleVenta;
-use App\Notifications\NotifyAdmin;
-use App\User;
-use App\Venta;
+use Upanel\DetalleVenta;
+use Upanel\Notifications\NotifyAdmin;
+use Upanel\User;
+use Upanel\Venta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

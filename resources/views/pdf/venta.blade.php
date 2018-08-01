@@ -119,7 +119,7 @@
         </div>
         <div id="datos">
             <p id="encabezado">
-                <b>IncanatoIT</b><br>José Gálvez 1368, Chongoyape - Chiclayo, Perú<br>Telefono:(+51)931742904<br>Email:jcarlos.ad7@gmail.com
+                <b>Upanel</b><br>Andrés Felipe Cardozo Cañas, Cali, Colombia<br>Telefono:(+57)3178876494<br>Email: andres.cardozo96@gmail.com
             </p>
         </div>
         <div id="fact">
